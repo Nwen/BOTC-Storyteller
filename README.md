@@ -28,12 +28,42 @@ After `npm run build`:
 The service worker pre-caches all assets. Once installed, the app works with
 no network connection.
 
+## Docker
+
+Pull and run the pre-built image:
+
+```bash
+docker run -p 8080:80 nouayne/botc-storyteller
+# open http://localhost:8080
+```
+
+Build and push yourself:
+
+```bash
+docker build -t nouayne/botc-storyteller .
+docker push nouayne/botc-storyteller
+```
+
+---
+
 ## Importing a script
 
 1. Go to the **Script** tab.
 2. Click **Import JSON…** or drop a `.json` file anywhere on the panel.
 3. Alternatively, pick one of the three built-in scripts (Trouble Brewing,
    Sects & Violets, Bad Moon Rising).
+
+### Bundled scripts
+
+Drop a script JSON file into `public/scripts/` and register it in
+`public/scripts/index.json`:
+
+```json
+["my_script.json"]
+```
+
+The app fetches and loads all listed scripts on startup; they appear as
+one-click buttons in the Script Manager.
 
 Script JSON must follow the [BotC Script Tool schema][schema]:
 
@@ -89,7 +119,7 @@ By default, icons are loaded from the bra1n/townsquare GitHub repo at runtime.
 To use local assets (or a self-hosted folder), go to **Tools → Config** and
 enter a base URL ending in `/`. Icons are resolved as:
 
-```
+```text
 <base_url><role_id>.png
 ```
 
