@@ -1,0 +1,199 @@
+[
+  {
+    "id": "washerwoman_info",
+    "characterId": "washerwoman",
+    "label": "Washerwoman info",
+    "atoms": [
+      { "kind": "statement", "key": "one_of_these_is_the" },
+      { "kind": "player", "slots": 2 },
+      { "kind": "character", "filter": { "team": "townsfolk" } }
+    ]
+  },
+  {
+    "id": "librarian_info",
+    "characterId": "librarian",
+    "label": "Librarian info",
+    "atoms": [
+      { "kind": "statement", "key": "one_of_these_is_the" },
+      { "kind": "player", "slots": 2 },
+      { "kind": "character", "filter": { "team": "outsider" } }
+    ]
+  },
+  {
+    "id": "investigator_info",
+    "characterId": "investigator",
+    "label": "Investigator info",
+    "atoms": [
+      { "kind": "statement", "key": "one_of_these_is_the" },
+      { "kind": "player", "slots": 2 },
+      { "kind": "character", "filter": { "team": "minion" } }
+    ]
+  },
+  {
+    "id": "chef_info",
+    "characterId": "chef",
+    "label": "Chef info",
+    "atoms": [
+      { "kind": "statement", "key": "evil_pair_count" },
+      { "kind": "number", "max": 6 }
+    ]
+  },
+  {
+    "id": "empath_info",
+    "characterId": "empath",
+    "label": "Empath info",
+    "atoms": [
+      { "kind": "statement", "key": "evil_neighbours_count" },
+      { "kind": "number", "max": 2 }
+    ]
+  },
+  {
+    "id": "fortuneteller_info",
+    "characterId": "fortuneteller",
+    "label": "Fortune Teller answer",
+    "atoms": [
+      { "kind": "statement", "key": "your_answer" },
+      { "kind": "yesno" }
+    ]
+  },
+  {
+    "id": "undertaker_info",
+    "characterId": "undertaker",
+    "label": "Undertaker info",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_was_the" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "ravenkeeper_info",
+    "characterId": "ravenkeeper",
+    "label": "Ravenkeeper info",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_is_the" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "spy_info",
+    "characterId": "spy",
+    "label": "Spy info",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "grandmother_info",
+    "characterId": "grandmother",
+    "label": "Grandmother info",
+    "atoms": [
+      { "kind": "statement", "key": "your_grandchild_is" },
+      { "kind": "player", "slots": 1 },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "seamstress_info",
+    "characterId": "seamstress",
+    "label": "Seamstress info",
+    "atoms": [
+      { "kind": "player", "slots": 2 },
+      { "kind": "statement", "key": "your_answer" },
+      { "kind": "yesno" }
+    ]
+  },
+  {
+    "id": "clockmaker_info",
+    "characterId": "clockmaker",
+    "label": "Clockmaker info",
+    "atoms": [
+      { "kind": "statement", "key": "demon_minion_distance" },
+      { "kind": "number", "max": 10 }
+    ]
+  },
+  {
+    "id": "dreamer_info",
+    "characterId": "dreamer",
+    "label": "Dreamer info",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_is_the" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "towncrier_info",
+    "characterId": "towncrier",
+    "label": "Town Crier info",
+    "atoms": [
+      { "kind": "statement", "key": "minion_nomination" },
+      { "kind": "yesno" }
+    ]
+  },
+  {
+    "id": "oracle_info",
+    "characterId": "oracle",
+    "label": "Oracle info",
+    "atoms": [
+      { "kind": "statement", "key": "dead_evil_count" },
+      { "kind": "number", "max": 15 }
+    ]
+  },
+  {
+    "id": "savant_info",
+    "characterId": "savant",
+    "label": "Savant info",
+    "atoms": [
+      { "kind": "free_text" },
+      { "kind": "free_text" }
+    ]
+  },
+  {
+    "id": "flowergirl_info",
+    "characterId": "flowergirl",
+    "label": "Flowergirl info",
+    "atoms": [
+      { "kind": "statement", "key": "demon_voted" },
+      { "kind": "yesno" }
+    ]
+  },
+  {
+    "id": "mathematician_info",
+    "characterId": "mathematician",
+    "label": "Mathematician info",
+    "atoms": [
+      { "kind": "statement", "key": "your_number" },
+      { "kind": "number", "max": 15 }
+    ]
+  },
+  {
+    "id": "chambermaid_info",
+    "characterId": "chambermaid",
+    "label": "Chambermaid info",
+    "atoms": [
+      { "kind": "statement", "key": "wake_count" },
+      { "kind": "number", "max": 15 }
+    ]
+  },
+  {
+    "id": "demon_info",
+    "label": "Demon info (night 1)",
+    "atoms": [
+      { "kind": "statement", "key": "demon_bluffs" },
+      { "kind": "character" },
+      { "kind": "character" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "minion_info",
+    "label": "Minion info (night 1)",
+    "atoms": [
+      { "kind": "statement", "key": "the_demon_is" },
+      { "kind": "player", "slots": 1 }
+    ]
+  }
+]

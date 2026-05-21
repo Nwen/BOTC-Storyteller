@@ -1,0 +1,20 @@
+{
+  "you_are":                "YOU ARE",
+  "one_of_these_is_the":    "ONE OF THESE TWO IS THE",
+  "your_answer":            "YOUR ANSWER:",
+  "evil_neighbours_count":  "EVIL NEIGHBOURS:",
+  "evil_pair_count":        "EVIL PAIRS OF NEIGHBOURS:",
+  "the_demon_is":           "THE DEMON IS",
+  "your_minions_are":       "YOUR MINIONS ARE",
+  "fellow_minions_are":     "YOUR FELLOW MINIONS ARE",
+  "this_player_is_the":     "THIS PLAYER IS THE",
+  "this_player_was_the":    "THIS PLAYER WAS THE",
+  "demon_bluffs":           "NOT-IN-PLAY CHARACTERS:",
+  "your_grandchild_is":     "YOUR GRANDCHILD IS",
+  "wake_count":             "WOKE TONIGHT:",
+  "minion_nomination":      "DID A MINION NOMINATE?",
+  "demon_voted":            "DID THE DEMON VOTE?",
+  "dead_evil_count":        "DEAD EVIL PLAYERS:",
+  "demon_minion_distance":  "STEPS BETWEEN DEMON AND NEAREST MINION:",
+  "your_number":            "YOUR NUMBER:"
+}

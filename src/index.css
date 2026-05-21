@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-gray-950 text-gray-100;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  /* Allow text selection only inside explicit inputs / textareas */
+  input, textarea, [contenteditable] {
+    user-select: text;
+  }
+
+  /* Remove momentum scroll artefacts on iOS */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@layer utilities {
+  .scrollable {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Team accent colours */
+  .team-townsfolk  { @apply text-blue-400 border-blue-500; }
+  .team-outsider   { @apply text-cyan-400 border-cyan-500; }
+  .team-minion     { @apply text-orange-400 border-orange-500; }
+  .team-demon      { @apply text-red-400 border-red-500; }
+  .team-traveler   { @apply text-purple-400 border-purple-500; }
+  .team-fabled     { @apply text-yellow-400 border-yellow-500; }
+
+  .bg-team-townsfolk { @apply bg-blue-900/40; }
+  .bg-team-outsider  { @apply bg-cyan-900/40; }
+  .bg-team-minion    { @apply bg-orange-900/40; }
+  .bg-team-demon     { @apply bg-red-900/40; }
+  .bg-team-traveler  { @apply bg-purple-900/40; }
+  .bg-team-fabled    { @apply bg-yellow-900/40; }
+}

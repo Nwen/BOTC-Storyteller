@@ -1,0 +1,1165 @@
+{
+  "locale": "fr",
+  "name": "Français",
+  "teams": {
+    "townsfolk": "Villageois",
+    "outsider": "Marginal",
+    "minion": "Serviteur",
+    "demon": "Démon",
+    "traveler": "Voyageur",
+    "good": "Camp du Village",
+    "evil": "Camp des Démons"
+  },
+  "statements": {
+    "you_are":               "TU ES",
+    "one_of_these_is_the":   "L'UNE DE CES DEUX PERSONNES EST CE ROLE",
+    "your_answer":           "TA RÉPONSE :",
+    "evil_neighbours_count": "NOMBRE DE VOISIN·ES MALÉFIQUES",
+    "evil_pair_count":       "PAIRES DE VOISIN·ES MALÉFIQUES",
+    "the_demon_is":          "LE DÉMON EST",
+    "your_minions_are":      "TES SBIRES SONT",
+    "fellow_minions_are":    "LES AUTRES SBIRES SONT",
+    "this_player_is_the":    "CE JOUEUR EST CE ROLE",
+    "this_player_was_the":   "CE JOUEUR ÉTAIT CE ROLE",
+    "demon_bluffs":          "PERSONNAGES NON EN JEU :",
+    "your_grandchild_is":    "TON PETIT-ENFANT EST",
+    "wake_count":            "RÉVEILLÉ·ES CETTE NUIT :",
+    "minion_nomination":     "UN SBIRE A-T-IL ACCUSÉ ?",
+    "demon_voted":           "LE DÉMON A-T-IL VOTÉ ?",
+    "dead_evil_count":       "JOUEURS MALÉFIQUES MORTS :",
+    "demon_minion_distance": "DISTANCE ENTRE LE DÉMON ET LE SBIRE LE PLUS PROCHE :",
+    "your_number":           "TON NOMBRE :"
+  },
+  "yesno": {
+    "yes": "OUI",
+    "no":  "NON"
+  },
+  "roles": {
+    "washerwoman": {
+      "name": "Lavandière",
+      "ability": "La première nuit, vous apprenez qu'un rôle en particulier du camp des villageois se trouve entre 2 personnes.",
+      "reminders": [
+        "Villageois",
+        "Faux"
+      ],
+      "firstNightReminder": "Montrer le jeton de personnage d'un Villageois en jeu. Désigner deux joueurs, dont l'un est ce personnage.",
+      "otherNightReminder": ""
+    },
+    "librarian": {
+      "name": "Libraire",
+      "ability": "La première nuit, vous apprenez qu'un rôle en particulier du camp des marginaux se trouve entre 2 personnes.",
+      "reminders": [
+        "Marginal",
+        "Faux"
+      ],
+      "firstNightReminder": "Montrer le jeton de personnage d'un Marginal en jeu. Désigner deux joueurs, dont l'un est ce personnage. (Ou indiquer qu'aucun Marginal n'est en jeu.)",
+      "otherNightReminder": ""
+    },
+    "investigator": {
+      "name": "Enquêteur",
+      "ability": "La première nuit, vous apprenez qu'un rôle en particulier du camp des serviteurs des démons se trouve entre 2 personnes.",
+      "reminders": [
+        "Serviteur",
+        "Faux"
+      ],
+      "firstNightReminder": "Montrer le jeton de personnage d'un Serviteur en jeu. Désigner deux joueurs, dont l'un est ce personnage.",
+      "otherNightReminder": ""
+    },
+    "chef": {
+      "name": "Chef",
+      "ability": "La première nuit, vous apprenez combien de paires de joueurs du camp des démons sont présentes (1 paire = 2 joueurs côte à côte).",
+      "reminders": [],
+      "firstNightReminder": "Indiquer avec les doigts (0, 1, 2, …) le nombre de paires de joueurs maléfiques côte à côte.",
+      "otherNightReminder": ""
+    },
+    "empath": {
+      "name": "Empathe",
+      "ability": "Chaque nuit, vous apprenez combien parmis vos deux voisins vivants sont du camp des démons.",
+      "reminders": [],
+      "firstNightReminder": "Indiquer avec les doigts (0, 1, 2) le nombre de voisins vivants maléfiques de l'Empathe.",
+      "otherNightReminder": "Indiquer avec les doigts (0, 1, 2) le nombre de voisins maléfiques."
+    },
+    "fortuneteller": {
+      "name": "Voyante",
+      "ability": "Chaque nuit, choisissez 2 joueurs : vous apprenez si l'un d'eux est un démon. Il y a un villageois qui vous apparaît comme un démon.",
+      "reminders": [
+        "Leurre"
+      ],
+      "firstNightReminder": "La Voyante désigne deux joueurs. Indiquer d'un signe de tête (oui, non) si l'un d'eux est le Démon.",
+      "otherNightReminder": "La Voyante désigne deux joueurs. Indiquer d'un signe de tête (oui, non) si l'un d'eux est le Démon."
+    },
+    "undertaker": {
+      "name": "Fossoyeur",
+      "ability": "Chaque nuit*, vous apprenez le rôle de la dernière personne exécutée.",
+      "reminders": [
+        "Exécuté"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si un joueur a été exécuté aujourd'hui : montrer le jeton de personnage de ce joueur."
+    },
+    "monk": {
+      "name": "Moine",
+      "ability": "Chaque nuit*, choisissez un joueur (sauf vous-même) : il est protégé des démons ce soir.",
+      "reminders": [
+        "Protégé"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le joueur précédemment protégé ne l'est plus. Le Moine désigne un joueur autre que lui-même. Marquer ce joueur 'Protégé'."
+    },
+    "ravenkeeper": {
+      "name": "Gardien des Corbeaux",
+      "ability": "Si vous mourez la nuit, vous êtes réveillé pour choisir un joueur : vous en découvrez le rôle.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si le Gardien des Corbeaux est mort cette nuit : il désigne un joueur. Montrer le jeton de personnage de ce joueur."
+    },
+    "virgin": {
+      "name": "Vierge",
+      "ability": "La première fois que vous êtes accusé.e, si l'auteur de l'accusation est un villageois, il est exécuté immédiatement.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "slayer": {
+      "name": "Pourfendeur",
+      "ability": "Une fois par partie, pendant la journée, le pourfendeur peut déclarer publiquement utiliser son pouvoir sur quelqu'un : s'il s'agit du Démon, il meurt.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "soldier": {
+      "name": "Soldat",
+      "ability": "Le soldat ne peut pas être tué par le démon.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "mayor": {
+      "name": "Maire",
+      "ability": "Si plus que 3 joueurs sont vivants et qu'aucune exécution n'a lieu, votre camp gagne. Si vous mourez la nuit, un autre joueur peut mourir à votre place (décidé aléatoirement).",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "butler": {
+      "name": "Majordome",
+      "ability": "Chaque nuit, choisissez un joueur (sauf vous-même) : demain, vous ne pourrez voter que s'il vote aussi.",
+      "reminders": [
+        "Maître"
+      ],
+      "firstNightReminder": "Le Majordome désigne un joueur. Marquer ce joueur 'Maître'.",
+      "otherNightReminder": "Le Majordome désigne un joueur. Marquer ce joueur 'Maître'."
+    },
+    "drunk": {
+      "name": "Ivrogne",
+      "ability": "Vous ne savez pas que vous êtes l'Ivrogne. Vous pensez cependant être un personnage du village, sauf que vos pouvoirs ne fonctionnent pas.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "recluse": {
+      "name": "Hermite",
+      "ability": "Vous pouvez apparaître comme ayant un rôle du camp des démons, même si vous êtes mort.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "saint": {
+      "name": "Saint",
+      "ability": "Si vous mourez par exécution, votre équipe perd.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "poisoner": {
+      "name": "Empoisonneur",
+      "ability": "Chaque nuit, choisissez un joueur : il est empoisonné ce soir et la journée suivante. (Le poison désactive / altère le pouvoir du joueur)",
+      "reminders": [
+        "Empoisonné"
+      ],
+      "firstNightReminder": "L'Empoisonneur désigne un joueur. Ce joueur est empoisonné.",
+      "otherNightReminder": "Le joueur précédemment empoisonné ne l'est plus. L'Empoisonneur désigne un joueur. Ce joueur est empoisonné."
+    },
+    "spy": {
+      "name": "Espion",
+      "ability": "Chaque nuit, vous consultez les rôles de tout le monde. Vous pouvez apparaître comme ayant un rôle du camp du village, même si vous êtes mort.",
+      "reminders": [],
+      "firstNightReminder": "Montrer le Grimoire à l'Espion aussi longtemps qu'il le souhaite.",
+      "otherNightReminder": "Montrer le Grimoire à l'Espion aussi longtemps qu'il le souhaite."
+    },
+    "scarletwoman": {
+      "name": "Dame Écarlate",
+      "ability": "S'il y a 5 joueurs ou plus en vie et que le Démon meurt, vous devenez le Démon. (Les voyageurs ne comptent pas.)",
+      "reminders": [
+        "Démon"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si la Dame Écarlate est devenue le Démon aujourd'hui : montrer la carte 'Vous êtes', puis le jeton du démon."
+    },
+    "baron": {
+      "name": "Baron",
+      "ability": "Il y a des marginaux en plus en jeu [+2 Marginaux]",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "imp": {
+      "name": "Diablotin",
+      "ability": "Chaque nuit*, choisissez un joueur : il meurt. Si vous vous tuez de cette façon, un serviteur devient le diablotin.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Diablotin désigne un joueur. Ce joueur meurt. Si le Diablotin s'est désigné lui-même : remplacer le personnage d'un serviteur vivant par un jeton de Diablotin de rechange. Montrer la carte 'Vous êtes', puis le jeton du Diablotin."
+    },
+    "bureaucrat": {
+      "name": "Bureaucrate",
+      "ability": "Chaque nuit, choisissez un joueur (sauf vous-même) : son vote comptera pour 3 votes le lendemain.",
+      "reminders": [
+        "3 votes"
+      ],
+      "firstNightReminder": "Le Bureaucrate désigne un joueur. Placer le marqueur '3 votes' du Bureaucrate à côté du jeton de personnage du joueur choisi.",
+      "otherNightReminder": "Le Bureaucrate désigne un joueur. Placer le marqueur '3 votes' du Bureaucrate à côté du jeton de personnage du joueur choisi."
+    },
+    "thief": {
+      "name": "Voleur",
+      "ability": "Chaque nuit, choisissez un joueur (sauf vous-même) : son vote comptera négativement demain.",
+      "reminders": [
+        "Vote négatif"
+      ],
+      "firstNightReminder": "Le Voleur désigne un joueur. Placer le marqueur 'Vote négatif' du Voleur à côté du jeton de personnage du joueur choisi.",
+      "otherNightReminder": "Le Voleur désigne un joueur. Placer le marqueur 'Vote négatif' du Voleur à côté du jeton de personnage du joueur choisi."
+    },
+    "gunslinger": {
+      "name": "Pistolero",
+      "ability": "Chaque jour, après le premier vote, vous pouvez choisir un joueur qui a voté : il meurt.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "scapegoat": {
+      "name": "Bouc émissaire",
+      "ability": "Si un joueur de votre camp est exécuté, vous pourriez être exécuté à sa place.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "beggar": {
+      "name": "Mendiant",
+      "ability": "Vous devez utiliser un jeton de vote pour voter. Si un joueur mort vous donne le sien, vous découvrez son camp. Vous êtes sobre et en bonne santé.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "grandmother": {
+      "name": "Grand-Mère",
+      "ability": "La première nuit, vous apprenez qu'un joueur est du camp du village. Vous apprenez son rôle. Si le Démon le tue, vous mourez aussi.",
+      "reminders": [
+        "Petit-enfant"
+      ],
+      "firstNightReminder": "Montrer le jeton de personnage marqué. Désigner le joueur marqué.",
+      "otherNightReminder": "Si le petit-enfant de la Grand-Mère a été tué par le Démon cette nuit : la Grand-Mère meurt."
+    },
+    "sailor": {
+      "name": "Marin",
+      "ability": "Chaque nuit, choisissez un joueur vivant : soit vous, soit lui, sera ivre jusqu'au début de la nuit suivante. Vous ne pouvez pas mourir.",
+      "reminders": [
+        "Ivre"
+      ],
+      "firstNightReminder": "Le Marin désigne un joueur vivant. Soit le Marin, soit le joueur choisi, est ivre.",
+      "otherNightReminder": "Le joueur précédemment ivre ne l'est plus. Le Marin désigne un joueur vivant. Soit le Marin, soit le joueur choisi, est ivre."
+    },
+    "chambermaid": {
+      "name": "Femme de chambre",
+      "ability": "Chaque nuit, choisissez 2 joueurs vivants (autre que vous-même) : vous découvrez combien d'entre eux se sont réveillés cette nuit grâce à leur capacité.",
+      "reminders": [],
+      "firstNightReminder": "La Femme de chambre désigne deux joueurs. Indiquer avec les doigts (0, 1, 2, …) combien d'entre eux se réveillent cette nuit pour utiliser leur pouvoir.",
+      "otherNightReminder": "La Femme de chambre désigne deux joueurs. Indiquer avec les doigts (0, 1, 2, …) combien d'entre eux se réveillent cette nuit pour utiliser leur pouvoir."
+    },
+    "exorcist": {
+      "name": "Exorciste",
+      "ability": "Chaque nuit*, choisissez un joueur (différent de celui de la nuit précédente) : si le Démon est choisi, il apprend qui vous êtes et ne se réveille pas cette nuit-là.",
+      "reminders": [
+        "Choisi"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "L'Exorciste désigne un joueur différent de celui de la nuit précédente. Si ce joueur est le Démon : réveiller le Démon. Montrer le jeton de l'Exorciste. Désigner l'Exorciste. Le Démon n'agit pas cette nuit."
+    },
+    "innkeeper": {
+      "name": "Tavernier",
+      "ability": "Chaque nuit*, choisissez 2 joueurs : ils ne peuvent pas mourir cette nuit, mais l'un d'eux est ivre jusqu'au début de la prochaine nuit.",
+      "reminders": [
+        "Protégé",
+        "Ivre"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Les joueurs précédemment protégés et ivres perdent ces marqueurs. Le Tavernier désigne deux joueurs. Ces joueurs sont protégés. L'un d'eux est ivre."
+    },
+    "gambler": {
+      "name": "Parieur",
+      "ability": "Chaque nuit*, choisissez un joueur et devinez son personnage : si vous vous trompez, vous mourez.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Parieur désigne un joueur et un personnage sur sa fiche. S'il se trompe, le Parieur meurt."
+    },
+    "gossip": {
+      "name": "Commère",
+      "ability": "Chaque jour, vous pouvez faire une déclaration publique. Ce soir, si cette déclaration était vraie, un joueur meurt.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si la déclaration publique de la Commère était vraie : choisir un joueur non protégé de la mort cette nuit. Ce joueur meurt."
+    },
+    "courtier": {
+      "name": "Courtier",
+      "ability": "Une fois par partie, pendant la nuit, choisissez un personnage : il sera ivre pendant 3 nuits et 3 jours.",
+      "reminders": [
+        "Ivre 3",
+        "Ivre 2",
+        "Ivre 1",
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "Le Courtier fait soit un signe de tête 'non', soit désigne un personnage sur sa fiche. Si le Courtier utilise son pouvoir : si ce personnage est en jeu, ce joueur est ivre.",
+      "otherNightReminder": "Réduire le nombre de jours restants pendant lesquels le joueur marqué est ivre. Si le Courtier n'a pas encore utilisé son pouvoir : il fait soit un signe de tête 'non', soit désigne un personnage sur sa fiche. Si le Courtier utilise son pouvoir : si ce personnage est en jeu, ce joueur est ivre."
+    },
+    "professor": {
+      "name": "Professeur",
+      "ability": "Une fois par partie, pendant la nuit*, choisissez un joueur mort : s'il s'agit d'un villageois, il est ressuscité.",
+      "reminders": [
+        "Vivant",
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si le Professeur n'a pas utilisé son pouvoir : il fait un signe de tête 'non', ou désigne un joueur. Si ce joueur est un villageois, il est désormais en vie."
+    },
+    "minstrel": {
+      "name": "Ménestrel",
+      "ability": "Quand un serviteur meurt exécuté, tous les autres joueurs (à l'exception des voyageurs) sont ivres jusqu'au début de la nuit du lendemain.",
+      "reminders": [
+        "Tous ivres"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "tealady": {
+      "name": "Dame du thé",
+      "ability": "Si vos deux voisins vivants sont du camp du village, ils ne peuvent pas mourir.",
+      "reminders": [
+        "Ne peut pas mourir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "pacifist": {
+      "name": "Pacifiste",
+      "ability": "Les joueurs du camp du village exécutés pourraient ne pas mourir. (Choix du Narrateur)",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "fool": {
+      "name": "Fou",
+      "ability": "La première fois que vous mourez, vous ne mourez pas.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "tinker": {
+      "name": "Bricoleur",
+      "ability": "Vous pourriez mourir à n'importe quel moment. (Au choix du Narrateur)",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Bricoleur peut mourir."
+    },
+    "moonchild": {
+      "name": "Enfant de la lune",
+      "ability": "Lorsque vous apprenez que vous êtes mort, choisissez publiquement 1 joueur vivant. Ce soir, s'il s'agissait d'un joueur du camp du village, il meurt.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si l'Enfant de la lune a utilisé son pouvoir pour cibler un joueur aujourd'hui : si ce joueur est du camp du village, il meurt."
+    },
+    "goon": {
+      "name": "Larbin",
+      "ability": "Chaque nuit, le premier joueur à vous choisir avec son pouvoir est ivre jusqu'au début de la nuit suivante. Vous rejoignez son camp.",
+      "reminders": [
+        "Ivre"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "lunatic": {
+      "name": "Aliéné",
+      "ability": "Vous pensez être un Démon, mais c'est faux. Le démon sait qui vous êtes et qui vous choisissez de tuer la nuit.",
+      "reminders": [
+        "Attaque 1",
+        "Attaque 2",
+        "Attaque 3"
+      ],
+      "firstNightReminder": "Si 7 joueurs ou plus : montrer à l'Aliéné un nombre arbitraire de 'Serviteurs', égal au nombre de Serviteurs en jeu. Montrer 3 jetons de personnages bons arbitraires. Si le jeton reçu par l'Aliéné est un Démon qui se réveillerait cette nuit : laisser l'Aliéné effectuer les actions du Démon. Placer ses marqueurs 'attaque'. Réveiller le Démon. Montrer le véritable jeton du Démon. Lui montrer le joueur Aliéné. Si l'Aliéné a attaqué des joueurs : montrer au vrai Démon chaque joueur marqué. Retirer tous les marqueurs 'attaque' de l'Aliéné.",
+      "otherNightReminder": "Laisser l'Aliéné effectuer les actions du Démon. Placer ses marqueurs 'attaque'. Si l'Aliéné a sélectionné des joueurs : réveiller le Démon. Montrer le marqueur 'attaque', puis désigner chaque joueur marqué. Retirer tous les marqueurs 'attaque' de l'Aliéné."
+    },
+    "godfather": {
+      "name": "Parrain",
+      "ability": "La première nuit, vous apprenez quels Marginaux sont en jeu. Si 1 est mort aujourd'hui, choisissez un joueur cette nuit: il meurt. [-1 ou +1 Marginal]",
+      "reminders": [
+        "Mort aujourd'hui",
+        "Mort"
+      ],
+      "firstNightReminder": "Montrer chacun des jetons de Marginaux en jeu.",
+      "otherNightReminder": "Si un Marginal est mort aujourd'hui : le Parrain désigne un joueur. Ce joueur meurt."
+    },
+    "devilsadvocate": {
+      "name": "Avocat du diable",
+      "ability": "Chaque nuit, choisissez un joueur vivant (différent de celui de la nuit précédente) : s'il est exécuté demain, il ne meurt pas.",
+      "reminders": [
+        "Survit à l'exécution"
+      ],
+      "firstNightReminder": "L'Avocat du diable désigne un joueur vivant. Ce joueur survit à l'exécution demain.",
+      "otherNightReminder": "L'Avocat du diable désigne un joueur vivant, différent de celui de la nuit précédente. Ce joueur survit à l'exécution demain."
+    },
+    "assassin": {
+      "name": "Assassin",
+      "ability": "Une fois par partie, pendant la nuit*, choisissez un joueur : il meurt, même si pour une raison quelconque il ne pouvait pas mourir.",
+      "reminders": [
+        "Mort",
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si l'Assassin n'a pas encore utilisé son pouvoir : il fait soit un signe de tête 'non', soit désigne un joueur. Ce joueur meurt."
+    },
+    "mastermind": {
+      "name": "Mastermind",
+      "ability": "Si le Démon meurt par exécution (ce qui met fin à la partie), jouez pendant 1 jour supplémentaire. Si un joueur est alors exécuté, son équipe perd.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "zombuul": {
+      "name": "Zombuul",
+      "ability": "Chaque nuit*, si personne n'est mort aujourd'hui, choisissez un joueur : il meurt. La première fois que vous mourez, vous restez en vie mais êtes considéré comme mort.",
+      "reminders": [
+        "Mort aujourd'hui",
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si personne n'est mort pendant la journée : le Zombuul désigne un joueur. Ce joueur meurt."
+    },
+    "pukka": {
+      "name": "Pukka",
+      "ability": "Chaque nuit, choisissez un joueur : il est empoisonné. Le joueur précédemment empoisonné meurt et n'est plus empoisonné.",
+      "reminders": [
+        "Empoisonné",
+        "Mort"
+      ],
+      "firstNightReminder": "Le Pukka désigne un joueur. Ce joueur est empoisonné.",
+      "otherNightReminder": "Le Pukka désigne un joueur. Ce joueur est empoisonné. Le joueur précédemment empoisonné meurt."
+    },
+    "shabaloth": {
+      "name": "Shabaloth",
+      "ability": "Chaque nuit*, choisissez 2 joueurs : ils meurent. Un joueur mort que vous avez choisi la nuit dernière peut être régurgité (au choix du Narrateur).",
+      "reminders": [
+        "Mort",
+        "Vivant"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Un joueur que le Shabaloth a choisi la nuit précédente peut être ressuscité. Le Shabaloth désigne deux joueurs. Ces joueurs meurent."
+    },
+    "po": {
+      "name": "Po",
+      "ability": "Chaque nuit*, vous pouvez choisir un joueur : il meurt. Si vous n'avez choisi personne la dernière nuit, choisissez 3 joueurs ce soir.",
+      "reminders": [
+        "Mort",
+        "3 attaques"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si le Po n'a choisi personne la nuit précédente : il désigne trois joueurs. Sinon : il fait soit un signe de tête 'non', soit désigne un joueur. Les joueurs choisis meurent."
+    },
+    "apprentice": {
+      "name": "Apprenti",
+      "ability": "La première nuit, vous obtenez une capacité de Villageois (si vous êtes du village) ou une capacité de Serviteur (si vous êtes du camp des démons).",
+      "reminders": [
+        "Est l'Apprenti"
+      ],
+      "firstNightReminder": "Montrer à l'Apprenti la carte 'Vous êtes', puis un jeton de Villageois ou de Serviteur. Dans le Grimoire, remplacer le jeton de l'Apprenti par ce jeton de personnage, et placer le marqueur 'Est l'Apprenti' à côté de ce jeton de personnage.",
+      "otherNightReminder": ""
+    },
+    "matron": {
+      "name": "Matrone",
+      "ability": "Chaque jour, vous pouvez choisir jusqu'à 3 groupes de 2 joueurs pour échanger leurs places. Les joueurs ne peuvent pas quitter leur place pour discuter en privé.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "judge": {
+      "name": "Juge",
+      "ability": "Une fois par partie, si un autre joueur est accusé, vous pouvez choisir de forcer l'exécution en cours à réussir ou à échouer.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "bishop": {
+      "name": "Évêque",
+      "ability": "Seul le narrateur peut nominer. Au moins un joueur du camp opposé doit être nominé chaque jour.",
+      "reminders": [
+        "Accuser un villageois",
+        "Accuser un maléfique"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "voudon": {
+      "name": "Vaudoo",
+      "ability": "Seuls vous et les morts pouvez voter. Ils n'ont pas besoin de jeton de vote pour le faire. Une majorité de 50 % n'est pas requise.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "clockmaker": {
+      "name": "Horloger",
+      "ability": "La première nuit vous apprenez combien de pas séparent le démon de son serviteur le plus proche. (1 pas = voisins, 2 pas = 1 personne entre, etc...)",
+      "reminders": [],
+      "firstNightReminder": "Indiquer avec la main le nombre (1, 2, 3, etc.) de places entre le Démon et le Serviteur le plus proche.",
+      "otherNightReminder": ""
+    },
+    "dreamer": {
+      "name": "Rêveur",
+      "ability": "Chaque nuit, choisissez un joueur (sauf vous-même ou les Voyageurs) : vous apprendrez un rôle de chaque camp, dont un seul sera correct.",
+      "reminders": [],
+      "firstNightReminder": "Le Rêveur désigne un joueur. Montrer 1 jeton de personnage bon et 1 jeton de personnage maléfique ; l'un des deux est correct.",
+      "otherNightReminder": "Le Rêveur désigne un joueur. Montrer 1 jeton de personnage bon et 1 jeton de personnage maléfique ; l'un des deux est correct."
+    },
+    "snakecharmer": {
+      "name": "Charmeur de Serpents",
+      "ability": "Chaque nuit, choisissez un joueur vivant : Si un démon est choisi, échangez son personnage et son alignement avec vous, puis il est empoisonné.",
+      "reminders": [
+        "Empoisonné"
+      ],
+      "firstNightReminder": "Le Charmeur de Serpents désigne un joueur. Si ce joueur est le Démon : échanger les personnages et les alignements du Démon et du Charmeur de Serpents. Réveiller chaque joueur pour l'informer de son nouveau rôle et alignement. Le nouveau Charmeur de Serpents est empoisonné.",
+      "otherNightReminder": "Le Charmeur de Serpents désigne un joueur. Si ce joueur est le Démon : échanger les personnages et les alignements du Démon et du Charmeur de Serpents. Réveiller chaque joueur pour l'informer de son nouveau rôle et alignement. Le nouveau Charmeur de Serpents est empoisonné."
+    },
+    "mathematician": {
+      "name": "Mathématicien",
+      "ability": "Chaque nuit, vous découvrez combien de capacités de joueurs ont fonctionné de manière anormale (depuis le lever du jour) en raison de la capacité d'un autre personnage.",
+      "reminders": [
+        "Anormal"
+      ],
+      "firstNightReminder": "Indiquer avec la main le nombre (0, 1, 2, etc.) de joueurs dont le pouvoir a mal fonctionné à cause d'autres pouvoirs.",
+      "otherNightReminder": "Indiquer avec la main le nombre (0, 1, 2, etc.) de joueurs dont le pouvoir a mal fonctionné à cause d'autres pouvoirs."
+    },
+    "flowergirl": {
+      "name": "Fille aux fleurs",
+      "ability": "Chaque nuit*, vous apprenez si un démon a voté aujourd'hui.",
+      "reminders": [
+        "Démon a voté",
+        "Démon n'a pas voté"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Indiquer d'un signe de tête (oui, non) si le Démon a voté aujourd'hui. Placer le marqueur 'Démon n'a pas voté' (retirer 'Démon a voté', le cas échéant)."
+    },
+    "towncrier": {
+      "name": "Crieur public",
+      "ability": "Chaque soir*, vous apprenez si un serviteur a accusé aujourd'hui.",
+      "reminders": [
+        "Serviteurs n'ont pas accusé",
+        "Serviteur a accusé"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Indiquer d'un signe de tête (oui, non) si un Serviteur a accusé aujourd'hui. Placer le marqueur 'Serviteurs n'ont pas accusé' (retirer 'Serviteur a accusé', le cas échéant)."
+    },
+    "oracle": {
+      "name": "Oracle",
+      "ability": "Chaque nuit*, vous apprenez combien de joueurs morts sont du camp des démons.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": "Indiquer avec la main le nombre (0, 1, 2, etc.) de joueurs morts maléfiques."
+    },
+    "savant": {
+      "name": "Savant",
+      "ability": "Chaque jour, vous pouvez rendre visite au narrateur pour apprendre deux choses en privé : l'une est vraie, l'autre est fausse.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "seamstress": {
+      "name": "Couturière",
+      "ability": "Une fois par partie, pendant la nuit, choisissez 2 joueurs (sauf vous-même) : vous découvrez s'ils sont du même camp.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "La Couturière fait soit un signe de tête 'non', soit désigne deux autres joueurs. Si la Couturière a choisi des joueurs, indiquer d'un signe de tête (oui, non) s'ils sont du même alignement.",
+      "otherNightReminder": "Si la Couturière n'a pas encore utilisé son pouvoir : elle fait soit un signe de tête 'non', soit désigne deux autres joueurs. Si la Couturière a choisi des joueurs, indiquer d'un signe de tête (oui, non) s'ils sont du même alignement."
+    },
+    "philosopher": {
+      "name": "Philosophe",
+      "ability": "Une fois par partie, pendant la nuit, choisissez un personnage du village : gagnez cette capacité. Si ce personnage est en jeu, il est ivre.",
+      "reminders": [
+        "Ivre",
+        "Est le Philosophe"
+      ],
+      "firstNightReminder": "Le Philosophe fait soit un signe de tête 'non', soit désigne un personnage bon sur sa fiche. S'il choisit un personnage : échanger le jeton de personnage hors-jeu avec le jeton du Philosophe et ajouter le marqueur 'Est le Philosophe'. Si le personnage est en jeu, placer le marqueur ivre à côté de ce joueur.",
+      "otherNightReminder": "Si le Philosophe n'a pas utilisé son pouvoir : il fait soit un signe de tête 'non', soit désigne un personnage bon sur sa fiche. S'il choisit un personnage : échanger le jeton de personnage hors-jeu avec le jeton du Philosophe et ajouter le marqueur 'Est le Philosophe'. Si le personnage est en jeu, placer le marqueur ivre à côté de ce joueur."
+    },
+    "artist": {
+      "name": "Artiste",
+      "ability": "Une fois par partie, pendant la journée, posez en privé au narrateur une question dont la réponse est oui ou non.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "juggler": {
+      "name": "Jongleur",
+      "ability": "Le premier jour, Devinez publiquement jusqu'à 5 rôles. La nuit, vous découvrez combien vous en avez deviné correctement.",
+      "reminders": [
+        "Correct"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si aujourd'hui était le premier jour du Jongleur : indiquer avec la main le nombre (0, 1, 2, etc.) de marqueurs 'Correct'. Retirer les marqueurs."
+    },
+    "sage": {
+      "name": "Sage",
+      "ability": "Si le démon vous tue, vous découvrez que le démon se trouve parmis 2 joueurs.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si le Sage a été tué par un Démon : désigner deux joueurs, dont l'un est ce Démon."
+    },
+    "mutant": {
+      "name": "Mutant",
+      "ability": "Si vous êtes « furieux » d'être un Marginal, vous risquez d'être exécuté.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "sweetheart": {
+      "name": "Prétendante",
+      "ability": "Quand vous mourez, 1 joueur deviens ivre. (Choix du narrateur)",
+      "reminders": [
+        "Ivre"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Choisir un joueur qui devient ivre."
+    },
+    "barber": {
+      "name": "Barbier",
+      "ability": "Si vous mourez, le Démon peut choisir 2 joueurs (sauf un autre Démon) pour échanger leurs personnages.",
+      "reminders": [
+        "Coupes de cheveux cette nuit"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si le Barbier est mort aujourd'hui : réveiller le Démon. Montrer la carte 'Ce personnage vous a sélectionné', puis le jeton du Barbier. Le Démon fait soit un signe de tête 'non', soit désigne 2 joueurs. S'il choisit des joueurs : échanger les jetons de personnage. Réveiller chaque joueur. Montrer 'Vous êtes', puis son nouveau jeton de personnage."
+    },
+    "klutz": {
+      "name": "Malhabile",
+      "ability": "Lorsque vous apprenez que vous êtes mort, choisissez publiquement 1 joueur vivant : s'il est du camp des démons, votre équipe perd.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "eviltwin": {
+      "name": "Jumeau Maléfique",
+      "ability": "Vous et un joueur du camp opposé vous connaissez. Si le joueur du village est exécuté, les démons l'emportent. Le village ne peut pas gagner si vous êtes tous les deux en vie.",
+      "reminders": [
+        "Jumeau"
+      ],
+      "firstNightReminder": "Réveiller le Jumeau Maléfique et son jumeau. Confirmer qu'ils se sont reconnus. Désigner le Jumeau Maléfique. Montrer son jeton de Jumeau Maléfique au joueur jumeau. Désigner le jumeau. Montrer son jeton de personnage au joueur Jumeau Maléfique.",
+      "otherNightReminder": ""
+    },
+    "witch": {
+      "name": "Sorcière",
+      "ability": "Chaque nuit, choisissez un joueur : s'il accuse demain, il meurt. S'il ne reste plus que 3 joueurs en vie, vous perdez cette capacité.",
+      "reminders": [
+        "Maudit"
+      ],
+      "firstNightReminder": "La Sorcière désigne un joueur. Si ce joueur accuse demain, il meurt immédiatement.",
+      "otherNightReminder": "S'il y a 4 joueurs ou plus en vie : la Sorcière désigne un joueur. Si ce joueur accuse demain, il meurt immédiatement."
+    },
+    "cerenovus": {
+      "name": "Cerenovus",
+      "ability": "Chaque nuit, choisissez un joueur et un personnage du village: le joueur est \"furieux\" d'être ce personnage demain, ou risque d'être exécuté.",
+      "reminders": [
+        "Furieux"
+      ],
+      "firstNightReminder": "Le Cerenovus désigne un joueur, puis un personnage sur sa fiche. Réveiller ce joueur. Montrer la carte 'Ce personnage vous a sélectionné', puis le jeton du Cerenovus. Montrer le jeton du personnage sélectionné. Si le joueur n'est pas furieux d'être ce personnage demain, il peut être exécuté.",
+      "otherNightReminder": "Le Cerenovus désigne un joueur, puis un personnage sur sa fiche. Réveiller ce joueur. Montrer la carte 'Ce personnage vous a sélectionné', puis le jeton du Cerenovus. Montrer le jeton du personnage sélectionné. Si le joueur n'est pas furieux d'être ce personnage demain, il peut être exécuté."
+    },
+    "pithag": {
+      "name": "Moire",
+      "ability": "Chaque nuit*, choisissez un joueur et un personnage qu'il deviendra (sauf s'il est déjà en jeu). Si un démon est créé, les morts de la nuit sont arbitraires.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": "La Moire désigne un joueur et un personnage sur la fiche. Si ce personnage n'est pas en jeu, réveiller ce joueur et lui montrer la carte 'Vous êtes' et le jeton de personnage correspondant. Si le personnage est en jeu, rien ne se passe."
+    },
+    "fanggu": {
+      "name": "Fang Gu",
+      "ability": "Chaque nuit*, choisissez un joueur : il meurt. Le premier Marginal ainsi tué devient un Fang Gu et vous mourez à sa place. [+1 Marginal]",
+      "reminders": [
+        "Mort",
+        "Une fois"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Fang Gu désigne un joueur. Ce joueur meurt. Ou, si ce joueur était un Marginal et qu'il n'y a pas d'autre Fang Gu en jeu : le Fang Gu meurt à la place du joueur choisi. Le joueur choisi est maintenant un Fang Gu maléfique. Réveiller le nouveau Fang Gu. Montrer la carte 'Vous êtes', puis le jeton du Fang Gu. Montrer la carte 'Vous êtes', puis le signe maléfique pouce baissé."
+    },
+    "vigormortis": {
+      "name": "Vigormortis",
+      "ability": "Chaque nuit*, choisissez un joueur : il meurt. Les serviteurs que vous tuez conservent leur capacité et empoisonnent 1 villageois voisin. [-1 Outsider]",
+      "reminders": [
+        "Mort",
+        "A le pouvoir",
+        "Empoisonné"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Vigormortis désigne un joueur. Ce joueur meurt. S'il s'agit d'un Serviteur, il conserve son pouvoir et un de ses voisins Villageois est empoisonné."
+    },
+    "nodashii": {
+      "name": "No Dashii",
+      "ability": "Chaque nuit*, choisissez un joueur : il meurt. Vos deux voisins du camp du village sont empoisonnés.",
+      "reminders": [
+        "Mort",
+        "Empoisonné"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le No Dashii désigne un joueur. Ce joueur meurt."
+    },
+    "vortox": {
+      "name": "Vortox",
+      "ability": "Chaque nuit*, choisissez un joueur : il meurt. Les capacités des villageois fournissent de fausses informations. Chaque jour, si personne n'est exécuté, le mal l'emporte.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Vortox désigne un joueur. Ce joueur meurt."
+    },
+    "barista": {
+      "name": "Barista",
+      "ability": "Chaque nuit, jusqu'au crépuscule, 1) un joueur devient sobre, en bonne santé et obtient des informations vraies, ou 2) sa capacité fonctionne deux fois. La cible apprend quel effet l'a touché.",
+      "reminders": [
+        "Sobre et en bonne santé",
+        "Pouvoir deux fois"
+      ],
+      "firstNightReminder": "Choisir un joueur, le réveiller et lui indiquer quel pouvoir du Barista l'affecte. Le traiter en conséquence (sobre/en bonne santé/info vraie ou activer son pouvoir deux fois).",
+      "otherNightReminder": "Choisir un joueur, le réveiller et lui indiquer quel pouvoir du Barista l'affecte. Le traiter en conséquence (sobre/en bonne santé/info vraie ou activer son pouvoir deux fois)."
+    },
+    "harlot": {
+      "name": "Courtisane",
+      "ability": "Chaque nuit*, choisissez un joueur vivant : s'il accepte, vous découvrez son personnage, mais vous risquez tous les deux de mourir.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "La Courtisane désigne un joueur. Endormir ensuite la Courtisane. Réveiller le joueur choisi, lui montrer le jeton 'Ce personnage vous a sélectionné', puis le jeton de la Courtisane. Ce joueur fait un signe de tête oui ou non. S'il a fait signe oui, réveiller la Courtisane et lui montrer le jeton de personnage du joueur choisi. Puis, décider que les deux joueurs meurent ou non."
+    },
+    "butcher": {
+      "name": "Boucher",
+      "ability": "Chaque jour, après la première exécution, vous pouvez accuser à nouveau.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "bonecollector": {
+      "name": "Collectionneur d'os",
+      "ability": "Une fois par partie, pendant la nuit*, choisissez un joueur mort : il retrouve ses capacités jusqu'au crépuscule.",
+      "reminders": [
+        "Sans pouvoir",
+        "A le pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Collectionneur d'os fait soit un signe de tête 'non', soit désigne un joueur mort. S'il désigne un joueur mort, placer le marqueur 'A le pouvoir' du Collectionneur d'os à côté du jeton de personnage du joueur choisi. (Il peut être nécessaire de le réveiller cette nuit pour utiliser son pouvoir.)"
+    },
+    "deviant": {
+      "name": "Déviant",
+      "ability": "Si vous avez été drôle aujourd'hui, vous ne pouvez pas être exilé.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "noble": {
+      "name": "Noble",
+      "ability": "La première nuit vous apprenez qu'un et un seul joueur parmis 3 est du camp des démons.",
+      "reminders": [
+        "Vu"
+      ],
+      "firstNightReminder": "Désigner 3 joueurs incluant un joueur maléfique, sans ordre particulier.",
+      "otherNightReminder": ""
+    },
+    "bountyhunter": {
+      "name": "Mercenaire",
+      "ability": "La première nuit vous apprenez 1 joueur du camp des démons. Si le joueur que vous connaissez meurt, vous découvrez un autre joueur du camp des démons ce soir. [1 villageois est du camp des démons]",
+      "reminders": [
+        "Connu"
+      ],
+      "firstNightReminder": "Désigner 1 joueur maléfique. Réveiller le villageois qui est maléfique et lui montrer la carte 'Vous êtes' et le signe maléfique pouce baissé.",
+      "otherNightReminder": "Si le joueur maléfique connu est mort, désigner un autre joueur maléfique."
+    },
+    "pixie": {
+      "name": "Pixie",
+      "ability": "La première nuit vous apprenez 1 qu'un rôle du village en jeu. Si vous étiez \"furieux\" d'avoir ce rôle, vous obtenez son pouvoir lorsqu'il meurt.",
+      "reminders": [
+        "Furieux",
+        "A le pouvoir"
+      ],
+      "firstNightReminder": "Montrer au Pixie 1 jeton de personnage Villageois en jeu.",
+      "otherNightReminder": ""
+    },
+    "general": {
+      "name": "Général",
+      "ability": "Chaque nuit, vous découvrez quelle camp le Narrateur estime être en train de gagner : le village, les démons ou aucun des deux.",
+      "reminders": [],
+      "firstNightReminder": "Montrer au Général un pouce levé pour le village qui gagne, un pouce baissé pour les démons qui gagnent, ou un pouce sur le côté pour aucun des deux.",
+      "otherNightReminder": "Montrer au Général un pouce levé pour le village qui gagne, un pouce baissé pour les démons qui gagnent, ou un pouce sur le côté pour aucun des deux."
+    },
+    "preacher": {
+      "name": "Prédicateur",
+      "ability": "Chaque nuit, choisissez un joueur : un serviteur, s'il est choisi, l'apprend. Tous les serviteurs choisis n'ont plus de capacité.",
+      "reminders": [
+        "Au sermon"
+      ],
+      "firstNightReminder": "Le Prédicateur désigne un joueur. Si un Serviteur est choisi, le réveiller et lui montrer la carte 'Ce personnage vous a sélectionné' puis le jeton du Prédicateur.",
+      "otherNightReminder": "Le Prédicateur désigne un joueur. Si un Serviteur est choisi, le réveiller et lui montrer la carte 'Ce personnage vous a sélectionné' puis le jeton du Prédicateur."
+    },
+    "king": {
+      "name": "Roi",
+      "ability": "Chaque nuit, si le nombre de morts est égal ou supérieur à celui des vivants, vous découvrez un rôle toujours en vie. Le Démon sait que vous êtes le Roi.",
+      "reminders": [],
+      "firstNightReminder": "Réveiller le Démon, lui montrer la carte 'Ce personnage vous a sélectionné', lui montrer le jeton du Roi et désigner le joueur Roi.",
+      "otherNightReminder": "S'il y a plus de morts que de vivants, montrer au Roi un jeton de personnage d'un joueur vivant."
+    },
+    "balloonist": {
+      "name": "Montgolfier",
+      "ability": "Chaque nuit, vous apprenez un joueur d'un type de personnage différent de celui de la nuit précédente. [+0 ou +1 Marginal]",
+      "reminders": [
+        "Villageois vu",
+        "Marginal vu",
+        "Serviteur vu",
+        "Démon vu",
+        "Voyageur vu"
+      ],
+      "firstNightReminder": "Choisir un type de personnage. Désigner un joueur dont le personnage est de ce type. Placer le marqueur 'Vu' du Montgolfier à côté de ce personnage.",
+      "otherNightReminder": "Choisir un type de personnage qui n'a pas encore de marqueur 'Vu' à côté d'un personnage de ce type. Désigner un joueur dont le personnage est de ce type, s'il y en a. Placer le marqueur 'Vu' du Montgolfier à côté de ce personnage."
+    },
+    "cultleader": {
+      "name": "Gourou",
+      "ability": "Chaque nuit, vous rejoignez le camp d'un de vos voisin en vie. Si tous les joueurs du village choisissent de rejoindre votre secte, votre camp actuel gagne.",
+      "reminders": [],
+      "firstNightReminder": "Si le Gourou a changé d'alignement, lui montrer le signe pouce levé bon ou pouce baissé maléfique en conséquence.",
+      "otherNightReminder": "Si le Gourou a changé d'alignement, lui montrer le signe pouce levé bon ou pouce baissé maléfique en conséquence."
+    },
+    "lycanthrope": {
+      "name": "Lycanthrope",
+      "ability": "Chaque nuit*, choisissez un joueur vivant. S'il est du village, il meurt et le Démon ne tue pas cette nuit-là. Un joueur du village vous apparaît comme du camp des démons.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Le Lycanthrope désigne un joueur vivant : s'il est du village, il meurt et personne d'autre ne peut mourir cette nuit."
+    },
+    "amnesiac": {
+      "name": "Amnésique",
+      "ability": "Vous ne connaissez pas votre capacité. Chaque jour, essayez de deviner en privé avec le narrateur ce qu'elle est : vous apprendrez ainsi à quel point vous êtes précis.",
+      "reminders": [
+        "?"
+      ],
+      "firstNightReminder": "Décider entièrement du pouvoir de l'Amnésique. Si le pouvoir de l'Amnésique le fait se réveiller cette nuit : réveiller l'Amnésique et exécuter son pouvoir.",
+      "otherNightReminder": "Si le pouvoir de l'Amnésique le fait se réveiller cette nuit : réveiller l'Amnésique et exécuter son pouvoir."
+    },
+    "nightwatchman": {
+      "name": "Veilleur",
+      "ability": "Une fois par partie, pendant la nuit, choisissez un joueur : il apprend que vous êtes le veilleur de nuit.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "Le Veilleur peut désigner un joueur. Réveiller ce joueur, lui montrer la carte 'Ce personnage vous a sélectionné' et le jeton du Veilleur, puis désigner le joueur Veilleur.",
+      "otherNightReminder": "Le Veilleur peut désigner un joueur. Réveiller ce joueur, lui montrer la carte 'Ce personnage vous a sélectionné' et le jeton du Veilleur, puis désigner le joueur Veilleur."
+    },
+    "engineer": {
+      "name": "Ingénieur",
+      "ability": "Une fois par partie, pendant la nuit, choisissez quels serviteurs ou quel démon sont en jeu.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "L'Ingénieur fait un signe de tête 'non', ou désigne un Démon ou le nombre approprié de Serviteurs. Si l'Ingénieur a choisi des personnages, remplacer le Démon ou les Serviteurs par les choix, puis réveiller les joueurs concernés et leur montrer la carte 'Vous êtes' et les jetons de personnage correspondants.",
+      "otherNightReminder": "L'Ingénieur fait un signe de tête 'non', ou désigne un Démon ou le nombre approprié de Serviteurs. Si l'Ingénieur a choisi des personnages, remplacer le Démon ou les Serviteurs par les choix, puis réveiller les joueurs concernés et leur montrer la carte 'Vous êtes' et les jetons de personnage correspondants."
+    },
+    "fisherman": {
+      "name": "Pêcheur",
+      "ability": "Une fois par partie, pendant la journée, rendez visite au narrateur pour obtenir des conseils qui aideront votre équipe à gagner.",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "huntsman": {
+      "name": "Chasseur",
+      "ability": "Une fois par partie, pendant la nuit, choisissez un joueur vivant : si la demoiselle est choisie, elle devient un villageois qui n'est pas en jeu. [+Demoiselle]",
+      "reminders": [
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "Le Chasseur fait un signe de tête 'non' ou désigne un joueur. S'il désigne la Demoiselle, réveiller ce joueur, lui montrer la carte 'Vous êtes' et un jeton de personnage hors-jeu.",
+      "otherNightReminder": "Le Chasseur fait un signe de tête 'non' ou désigne un joueur. S'il désigne la Demoiselle, réveiller ce joueur, lui montrer la carte 'Vous êtes' et un jeton de personnage hors-jeu."
+    },
+    "alchemist": {
+      "name": "Alchimiste",
+      "ability": "Vous disposez d'une capacité d'un serviteur. Lorsque vous l'utilisez, le narrateur peut vous demander de faire un autre choix.",
+      "reminders": [],
+      "firstNightReminder": "Montrer à l'Alchimiste un jeton de Serviteur hors-jeu.",
+      "otherNightReminder": ""
+    },
+    "farmer": {
+      "name": "Fermier",
+      "ability": "Si vous mourez pendant la nuit, un joueur du village encore en vie devient un fermier.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si un Fermier est mort cette nuit, choisir un autre joueur du village et en faire un Fermier. Réveiller ce joueur, lui montrer la carte 'Vous êtes' et le jeton de personnage du Fermier."
+    },
+    "magician": {
+      "name": "Magicien",
+      "ability": "Le démon pense que vous êtes un serviteur. Les serviteurs pensent que vous êtes un démon.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "choirboy": {
+      "name": "Choriste",
+      "ability": "Si le Démon tue le Roi, vous découvrez quel joueur est le Démon. [+Roi]",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si le Roi a été tué par le Démon, réveiller le Choriste et désigner le joueur Démon."
+    },
+    "poppygrower": {
+      "name": "Fleuriste",
+      "ability": "Les serviteurs et le Démon ne se connaissent pas. Si vous mourez, ils apprennent qui ils sont les uns les autres cette nuit-là.",
+      "reminders": [
+        "Réveil maléfique"
+      ],
+      "firstNightReminder": "Ne pas informer le Démon/les Serviteurs de leurs identités respectives.",
+      "otherNightReminder": "Si la Fleuriste est morte, montrer aux Serviteurs/au Démon leurs identités respectives."
+    },
+    "atheist": {
+      "name": "Athée",
+      "ability": "Le Narrateur peut enfreindre les règles du jeu, et si le narrateur est exécuté, le bien l'emporte, même si vous êtes mort. [Pas de personnages du camp des démons]",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "cannibal": {
+      "name": "Cannibale",
+      "ability": "Vous héritez des capacités de la dernière personne exécutée. Si celle-ci était du camp des démons, vous êtes empoisonné jusqu'à ce qu'un joueur du camp du village meurt par exécution.",
+      "reminders": [
+        "Empoisonné",
+        "Mort aujourd'hui"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "snitch": {
+      "name": "Balance",
+      "ability": "Chaque serviteur dispose de 3 rôles bluffs.",
+      "reminders": [],
+      "firstNightReminder": "Après les informations aux Serviteurs, réveiller chaque Serviteur et lui montrer trois jetons de personnages hors-jeu. Ils peuvent être identiques ou différents les uns des autres et de ceux montrés au Démon.",
+      "otherNightReminder": ""
+    },
+    "acrobat": {
+      "name": "Acrobate",
+      "ability": "Chaque nuit*, choisissez un joueur : s'il est ou devient ivre ou empoisonné cette nuit, vous mourez.",
+      "reminders": [
+        "Mort"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Si un voisin vivant du camp du village est ivre ou empoisonné, l'Acrobate meurt."
+    },
+    "puzzlemaster": {
+      "name": "Dissecteur",
+      "ability": "1 joueur est ivre, même si vous mourez. Si vous devinez (une seule tentative) qui c'est, vous découvrez qui est le Démon, mais si vous vous trompez, vous obtenez de fausses informations.",
+      "reminders": [
+        "Ivre",
+        "Tentative utilisée"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "heretic": {
+      "name": "Hérétique",
+      "ability": "Le camp qui perd gagne, et le camp qui gagne perd, même si vous êtes mort.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "damsel": {
+      "name": "Demoiselle",
+      "ability": "Tous les serviteurs savent qu'une demoiselle est en jeu. Si un serviteur devine publiquement que vous êtes la demoiselle, votre équipe perd (une seule tentative autorisée).",
+      "reminders": [
+        "Tentative utilisée"
+      ],
+      "firstNightReminder": "Réveiller tous les Serviteurs, leur montrer la carte 'Ce personnage vous a sélectionné' et le jeton de la Demoiselle.",
+      "otherNightReminder": "Si sélectionnée par le Chasseur, réveiller la Demoiselle, montrer la carte 'Vous êtes' et un jeton de Villageois hors-jeu."
+    },
+    "golem": {
+      "name": "Golem",
+      "ability": "Vous ne pouvez accuser qu'une seule fois par partie. Lorsque vous le faites, si l'accusé n'est pas le Démon, il meurt.",
+      "reminders": [
+        "Ne peut plus accuser"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "politician": {
+      "name": "Politicien",
+      "ability": "Si vous étiez le joueur le plus responsable de la défaite de votre équipe, vous changez d'alignement et gagnez, même si vous êtes mort.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "widow": {
+      "name": "Veuve",
+      "ability": "La première nuit, consultez le Grimoire et choisissez un joueur : il est empoisonné. Un joueur du village sait qu'une veuve est en jeu.",
+      "reminders": [
+        "Empoisonné"
+      ],
+      "firstNightReminder": "Montrer le Grimoire à la Veuve aussi longtemps qu'elle le souhaite. La Veuve désigne un joueur. Ce joueur est empoisonné. Réveiller un joueur du village. Montrer la carte 'Ces personnages sont en jeu', puis le jeton de personnage de la Veuve.",
+      "otherNightReminder": ""
+    },
+    "fearmonger": {
+      "name": "Intimidateur",
+      "ability": "Chaque nuit, choisissez un joueur : si vous l'accusez et l'exécutez, son équipe perd. Tous les joueurs savent si vous choisissez un nouveau joueur.",
+      "reminders": [
+        "Peur"
+      ],
+      "firstNightReminder": "L'Intimidateur désigne un joueur. Placer le jeton 'Peur' à côté de ce joueur et annoncer qu'un nouveau joueur a été sélectionné avec le pouvoir de l'Intimidateur.",
+      "otherNightReminder": "L'Intimidateur désigne un joueur. Si différent de la nuit précédente, placer le jeton 'Peur' à côté de ce joueur et annoncer qu'un nouveau joueur a été sélectionné avec le pouvoir de l'Intimidateur."
+    },
+    "psychopath": {
+      "name": "Psychopathe",
+      "ability": "Chaque jour, avant les accusations, vous pouvez choisir publiquement un joueur : il meurt. Si vous êtes exécuté, vous ne mourez que si vous perdez au pierre-feuille-ciseaux contre la personne qui vous a accusé.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "goblin": {
+      "name": "Goblin",
+      "ability": "Si vous déclarez publiquement être le Gobelin lorsque vous êtes accusé et que vous êtes exécuté ce jour-là, votre équipe gagne.",
+      "reminders": [
+        "Revendiqué"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "mephit": {
+      "name": "Mezepheles",
+      "ability": "La première nuit, vous apprenez un mot secret. Le premier joueur du village à prononcer ce mot rejoint le camp des démons à la nuit tombée.",
+      "reminders": [
+        "Devient maléfique",
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "Montrer au Mezepheles son mot secret.",
+      "otherNightReminder": "Réveiller le 1er joueur du village ayant prononcé le mot secret du Mezepheles et lui montrer la carte 'Vous êtes' et le signe maléfique pouce baissé."
+    },
+    "mezepheles": {
+      "name": "Mezepheles",
+      "ability": "La première nuit, vous apprenez un mot secret. Le premier joueur du village à prononcer ce mot rejoint le camp des démons à la nuit tombée.",
+      "reminders": [
+        "Devient maléfique",
+        "Sans pouvoir"
+      ],
+      "firstNightReminder": "Montrer au Mezepheles son mot secret.",
+      "otherNightReminder": "Réveiller le 1er joueur du village ayant prononcé le mot secret du Mezepheles et lui montrer la carte 'Vous êtes' et le signe maléfique pouce baissé."
+    },
+    "marionette": {
+      "name": "Marionnette",
+      "ability": "Vous pensez avoir un rôle du village, mais c'est faux. Le Démon sait qui vous êtes. [Vous êtes voisin du Démon].",
+      "reminders": [],
+      "firstNightReminder": "Sélectionner un des joueurs bons à côté du Démon et placer le marqueur 'Est la Marionnette'. Réveiller le Démon et lui montrer la Marionnette.",
+      "otherNightReminder": ""
+    },
+    "boomdandy": {
+      "name": "Kamikaze",
+      "ability": "Si vous êtes exécuté, tous les joueurs sauf 3 meurent. Après un compte à rebours de 10 à 1, le joueur qui a le plus de joueurs le désignant meurt, répétez jusqu'à ce qu'il ne reste plus que 3 joueurs en vie.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "lilmonsta": {
+      "name": "Ti'Monstre",
+      "ability": "Ti'Monstre n'est pas un joueur, il est gardé par un Joueur. Chaque nuit, les serviteurs choisissent qui gardera Ti'Monstre. Le gardien devient le Démon. Chaque nuit*, un joueur peut mourir. [+1 serviteur]",
+      "reminders": [],
+      "firstNightReminder": "Réveiller tous les Serviteurs ensemble, leur permettre de voter en désignant qui ils veulent voir garder Ti'Monstre.",
+      "otherNightReminder": "Réveiller tous les Serviteurs ensemble, leur permettre de voter en désignant qui ils veulent voir garder Ti'Monstre. Choisir un joueur, ce joueur meurt."
+    },
+    "lleech": {
+      "name": "Liche",
+      "ability": "Chaque nuit*, choisissez un joueur : il meurt. La première nuit, choisissez un joueur qui deviendra votre hôte: il est empoisonné. Vous mourez si et seulement si votre hôte meurt.",
+      "reminders": [
+        "Mort",
+        "Empoisonné"
+      ],
+      "firstNightReminder": "La Liche désigne un joueur. Placer le marqueur 'Empoisonné'.",
+      "otherNightReminder": "La Liche désigne un joueur. Ce joueur meurt."
+    },
+    "alhadikhia": {
+      "name": "Al-Hadikhia",
+      "ability": "Chaque nuit*, vous pouvez choisir 3 joueurs (tous les joueurs savent qui) : chacun choisit en silence de vivre ou de mourir, mais si tous choisissent de vivre, tous meurent.",
+      "reminders": [
+        "1",
+        "2",
+        "3",
+        "A choisi la mort",
+        "A choisi la vie"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "L'Al-Hadikhia choisit 3 joueurs. Annoncer le premier joueur, le réveiller pour qu'il acquiesce (vivre) ou secoue la tête (mourir), tuer ou ressusciter en conséquence, puis le rendormir et annoncer le joueur suivant. Si les 3 sont vivants après cela, les 3 meurent."
+    },
+    "legion": {
+      "name": "Légion",
+      "ability": "Chaque nuit*, un joueur peut mourir (choix du narrateur). Les exécutions échouent si seuls les démons ont voté. Vous apparaissez en tant que serviteur. [La majorité des joueurs sont la Légion].",
+      "reminders": [
+        "Mort",
+        "Va mourir"
+      ],
+      "firstNightReminder": "",
+      "otherNightReminder": "Choisir un joueur, ce joueur meurt."
+    },
+    "leviathan": {
+      "name": "Leviathan",
+      "ability": "Si plus d'un joueur du village est exécuté, les démons l'emportent. Tous les joueurs savent que vous êtes en jeu. Après le cinquième jour, les démons l'emportent.",
+      "reminders": [
+        "Jour 1",
+        "Jour 2",
+        "Jour 3",
+        "Jour 4",
+        "Jour 5",
+        "Villageois exécuté"
+      ],
+      "firstNightReminder": "Placer le marqueur 'Jour 1' du Leviathan. Annoncer : 'Le Leviathan est en jeu ; c'est le Jour 1.'",
+      "otherNightReminder": "Changer le marqueur de Jour du Leviathan pour le jour suivant."
+    },
+    "riot": {
+      "name": "L'Émeute",
+      "ability": "Le troisième jour, les serviteurs deviennent L'Émeute et les accusés meurent, mais accusent immédiatement un joueur vivant. Il n'y a aucun moyen d'éviter L'Émeute.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    },
+    "gangster": {
+      "name": "Gangster",
+      "ability": "Une fois par jour, vous pouvez choisir de tuer un voisin vivant, si votre autre voisin vivant est d'accord.",
+      "reminders": [],
+      "firstNightReminder": "",
+      "otherNightReminder": ""
+    }
+  }
+}
