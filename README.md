@@ -4,6 +4,27 @@ An unofficial, single-device web app for the Storyteller (game master) of
 **Blood on the Clocktower**. Runs fully offline as a PWA. No accounts, no
 networking, no server.
 
+## Features
+
+- **Grimoire** — seat players, drag-and-drop to reorder, assign roles
+  (manually or randomized per the correct team composition), track life/death,
+  ghost votes, and reminder tokens. A hide/show toggle blanks roles for
+  screen-sharing.
+- **Script** — import a custom script JSON or pick a bundled base script
+  (Trouble Brewing, Sects & Violets, Bad Moon Rising).
+- **Night** — step-by-step first-night / other-night order built from the
+  script and current players, with per-role reminder text and quick-access
+  info sheets for roles that need one.
+- **Day** — nominations, vote tracking (with ghost votes), and execution
+  threshold/resolution.
+- **Library** — create custom homebrew roles, edit official role text,
+  import community translations, and manage reusable player-info templates.
+- **Tools** — player info sheets/statements, demon bluffs, setup composition
+  helper, icon base URL config, and game-state export/import/reset.
+- **Log** — chronological event log with manual annotations, exportable as
+  plain text.
+- **Presentation mode** — fullscreen overlay for showing info to a player.
+
 ---
 
 ## Quick start
@@ -30,18 +51,19 @@ no network connection.
 
 ## Docker
 
-Pull and run the pre-built image:
+Build the image locally with the bundled `docker-compose.yml` (serves on port `32768`):
 
 ```bash
-docker run -p 8080:80 nouayne/botc-storyteller
-# open http://localhost:8080
+docker compose up -d
+# open http://localhost:32768
 ```
 
-Build and push yourself:
+Or build and run manually:
 
 ```bash
-docker build -t nouayne/botc-storyteller .
-docker push nouayne/botc-storyteller
+docker build -t botc-storyteller .
+docker run -p 8080:80 botc-storyteller
+# open http://localhost:8080
 ```
 
 ---
@@ -127,6 +149,18 @@ e.g. `http://localhost:8080/icons/` → `http://localhost:8080/icons/imp.png`.
 
 If an icon fails to load, a team-coloured fallback badge with the character's
 initials is shown instead.
+
+## Game state & log export
+
+**Tools → Config** also has:
+
+- **Export/Import game** — save the full game state (players, roles,
+  nominations, log, etc.) as JSON, or load it back in.
+- **New game (keep players & script)** — resets roles, tokens, and notes but
+  keeps the current seating and script.
+- **New game (full reset)** — clears everything.
+
+The **Log** tab lets you export the event log as a plain-text file.
 
 ---
 

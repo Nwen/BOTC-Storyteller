@@ -1,0 +1,6 @@
+services:
+  botc-storyteller:
+    build: .
+    ports:
+      - "32768:80"
+    restart: unless-stopped

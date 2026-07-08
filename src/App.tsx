@@ -31,8 +31,8 @@ const NAV: NavItem[] = [
 ]
 
 export default function App() {
-  const [view, setView] = useState<View>('grimoire')
-  const { phase, day, advancePhase } = useGameStore()
+  const [view, setView] = useState<View>('tools')
+  const { phase, day } = useGameStore()
   const { activeLocale, locales } = useLibraryStore()
 
   useEffect(() => { void loadBundledLocales(); void loadBundledScripts() }, [])
@@ -59,7 +59,7 @@ export default function App() {
         {NAV.map(({ id, label, icon }) => (
           <button
             key={id}
-            onClick={() => { if (id === 'night' && phase === 'setup') { advancePhase() } setView(id) }}
+            onClick={() => setView(id)}
             className={`flex items-center gap-1.5 px-4 py-3 text-sm whitespace-nowrap transition-colors border-b-2 ${
               view === id
                 ? 'border-blue-500 text-white'

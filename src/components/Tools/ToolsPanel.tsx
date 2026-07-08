@@ -18,7 +18,7 @@ const TAB_LABELS: Record<Tab, string> = {
 }
 
 export function ToolsPanel() {
-  const [tab, setTab] = useState<Tab>('info')
+  const [tab, setTab] = useState<Tab>('setup')
 
   return (
     <div className="h-full flex flex-col">

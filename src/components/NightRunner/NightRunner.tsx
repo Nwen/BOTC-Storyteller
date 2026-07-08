@@ -9,7 +9,7 @@ import { useRolePool } from '@/hooks/useRolePool'
 import type { NightStep } from '@/types'
 
 export function NightRunner() {
-  const { script, players, day, advancePhase } = useGameStore()
+  const { script, players, day, advancePhase, setPhase } = useGameStore()
   const { editOverrides, locales, activeLocale, customTemplates } = useLibraryStore()
   const openComposer = useInfoStore((s) => s.openComposer)
   const rolePool = useRolePool()
@@ -167,8 +167,14 @@ export function NightRunner() {
                 onNext={() => {
                   toggle(currentStep)
                   const nextId = steps[currentStep + 1]?.id
-                  if (step.id === 'dusk' || nextId === 'dawn' || step.id === 'dawn') {
+                  if (step.id === 'dusk') {
+                    // Enters the night phase; advancePhase also bumps the day counter
+                    // when coming from a previous day's dusk (not on the very first night).
                     advancePhase()
+                  } else if (nextId === 'dawn') {
+                    setPhase('dawn')
+                  } else if (step.id === 'dawn') {
+                    setPhase('day')
                   }
                   if (currentStep === total - 1) reset()
                   else setCurrentStep((i) => i + 1)

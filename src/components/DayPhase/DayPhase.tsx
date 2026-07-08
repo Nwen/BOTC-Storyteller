@@ -16,7 +16,7 @@ export function DayPhase() {
 
   const threshold = executionThreshold(players)
   const livingCount = players.filter((p) => p.isAlive).length
-  const canVote = phase === 'day'
+  const canVote = phase === 'day' || phase === 'dusk'
 
   const submitNomination = () => {
     setNomError(null)
@@ -56,7 +56,7 @@ export function DayPhase() {
           <div className="p-4 space-y-3 border-b border-gray-700">
             <p className="text-sm font-medium text-gray-300">New Nomination</p>
             {!canVote && (
-              <p className="text-xs text-yellow-600">Nominations only available during the Day phase.</p>
+              <p className="text-xs text-yellow-600">Nominations only available during Day and Dusk phases.</p>
             )}
             <PlayerSelect
               label="Nominator"

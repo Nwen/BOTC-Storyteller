@@ -317,6 +317,9 @@ export const useGameStore = create<GameState & GameActions>()(
         }
       },
     }),
-    { name: 'botc-game' },
+    {
+      name: 'botc-game',
+      partialize: ({ phase: _phase, day: _day, ...rest }) => rest,
+    },
   ),
 )
