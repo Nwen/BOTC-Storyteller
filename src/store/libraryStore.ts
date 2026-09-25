@@ -30,6 +30,10 @@ interface LibraryActions {
   // Bundled scripts (loaded from public/scripts/ at startup)
   addBundledScript: (script: LoadedScript) => void
 
+  // Imported scripts, kept across sessions
+  saveScript: (script: LoadedScript, fallbackName?: string) => void
+  removeSavedScript: (id: string) => void
+
   // Bulk export / import
   exportLibrary: () => string
   importLibrary: (json: string) => void
@@ -43,6 +47,7 @@ const defaultState: LibraryState = {
   customTemplates: [],
   customStatements: {},
   bundledScripts: [],
+  savedScripts: [],
 }
 
 export const useLibraryStore = create<LibraryState & LibraryActions>()(
@@ -130,6 +135,25 @@ export const useLibraryStore = create<LibraryState & LibraryActions>()(
       addBundledScript: (script) =>
         set((s) => ({ bundledScripts: [...s.bundledScripts, script] })),
 
+      saveScript: (script, fallbackName) =>
+        set((s) => {
+          const name = script.meta.name?.trim() || fallbackName?.trim() || 'Unnamed script'
+          const entry = { id: nanoid(), name, savedAt: Date.now(), script }
+          // Re-importing a script under a name already saved replaces it rather than duplicating
+          const existing = s.savedScripts.find((e) => e.name === name)
+          if (existing) {
+            return {
+              savedScripts: s.savedScripts.map((e) =>
+                e.id === existing.id ? { ...entry, id: existing.id } : e,
+              ),
+            }
+          }
+          return { savedScripts: [...s.savedScripts, entry] }
+        }),
+
+      removeSavedScript: (id) =>
+        set((s) => ({ savedScripts: s.savedScripts.filter((e) => e.id !== id) })),
+
       exportLibrary: () => JSON.stringify(get(), null, 2),
 
       importLibrary: (json) => {
@@ -142,6 +166,7 @@ export const useLibraryStore = create<LibraryState & LibraryActions>()(
             activeLocale:      data.activeLocale      ?? s.activeLocale,
             customTemplates:   data.customTemplates   ?? s.customTemplates,
             customStatements:  data.customStatements  ?? s.customStatements,
+            savedScripts:      data.savedScripts      ?? s.savedScripts,
           }))
         } catch {
           throw new Error('Invalid library JSON')

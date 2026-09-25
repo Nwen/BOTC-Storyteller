@@ -51,6 +51,47 @@ export function getTemplateForCharacter(
   return getAllTemplates(customTemplates).find((t) => t.characterId === characterId)
 }
 
+export function getTemplateById(
+  id: string,
+  customTemplates: InfoTemplate[],
+): InfoTemplate | undefined {
+  return getAllTemplates(customTemplates).find((t) => t.id === id)
+}
+
+/** What the current game already knows, used to pre-fill a freshly loaded template */
+export interface GameContext {
+  /** Demon bluffs currently set, in order */
+  bluffs?: string[]
+  /** The player holding the demon, if a demon is assigned */
+  demonPlayerId?: string | null
+}
+
+/**
+ * Expand a template and pre-fill the slots the grimoire can already answer:
+ * the demon's bluffs, and — for minion info — who the demon is.
+ */
+export function expandTemplateForGame(
+  template: InfoTemplate,
+  ctx: GameContext = {},
+): DraftAtom[] {
+  const atoms = expandTemplate(template)
+  const bluffs = ctx.bluffs ?? []
+
+  if (template.id === 'demon_info' || template.id === 'minion_info') {
+    let bluffIdx = 0
+    return atoms.map((atom) => {
+      if (atom.kind === 'character' && bluffIdx < bluffs.length) {
+        return { ...atom, roleId: bluffs[bluffIdx++] ?? null }
+      }
+      if (atom.kind === 'player' && template.id === 'minion_info' && ctx.demonPlayerId) {
+        return { ...atom, playerId: ctx.demonPlayerId }
+      }
+      return atom
+    })
+  }
+  return atoms
+}
+
 export function expandTemplate(template: InfoTemplate): DraftAtom[] {
   const result: DraftAtom[] = []
   for (const atom of template.atoms) {

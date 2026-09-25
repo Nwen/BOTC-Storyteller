@@ -75,6 +75,12 @@ docker run -p 8080:80 botc-storyteller
 3. Alternatively, pick one of the three built-in scripts (Trouble Brewing,
    Sects & Violets, Bad Moon Rising).
 
+Imported scripts are saved automatically and appear in the **Saved** row, ready
+to reload in a later session. Re-importing a script whose name you already have
+replaces that entry instead of duplicating it; a script with no `_meta` name is
+saved under its filename. The **×** on a saved script removes it (with a
+confirmation) — it does not unload the script currently in play.
+
 ### Bundled scripts
 
 Drop a script JSON file into `public/scripts/` and register it in

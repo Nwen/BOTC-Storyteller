@@ -2,17 +2,26 @@ import { useState, useMemo, useEffect } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { useInfoStore } from '@/store/infoStore'
+import { useUiStore } from '@/store/uiStore'
 import { buildNightOrder } from '@/lib/nightOrder'
 import { resolveRoleText } from '@/lib/roleResolution'
-import { getTemplateForCharacter, expandTemplate } from '@/lib/infoResolution'
-import { useRolePool } from '@/hooks/useRolePool'
+import { getTemplateForCharacter, getTemplateById, expandTemplateForGame } from '@/lib/infoResolution'
+import { useRolePool, useDemonPlayerId } from '@/hooks/useRolePool'
 import type { NightStep } from '@/types'
 
+/** Info templates backing the non-character night steps */
+const SPECIAL_TEMPLATES: Record<string, string> = {
+  minioninfo: 'minion_info',
+  demoninfo: 'demon_info',
+}
+
 export function NightRunner() {
-  const { script, players, day, advancePhase, setPhase } = useGameStore()
+  const { script, players, day, bluffs, advancePhase, setPhase } = useGameStore()
   const { editOverrides, locales, activeLocale, customTemplates } = useLibraryStore()
   const openComposer = useInfoStore((s) => s.openComposer)
+  const goToPlayerInfo = useUiStore((s) => s.goToPlayerInfo)
   const rolePool = useRolePool()
+  const demonPlayerId = useDemonPlayerId()
 
   const [nightType, setNightType] = useState<'first' | 'other'>(day === 0 ? 'first' : 'other')
   const [includeAll, setIncludeAll] = useState(false)
@@ -137,15 +146,21 @@ export function NightRunner() {
               </div>
             )}
 
-            {step.type === 'role' && (() => {
-              const tpl = getTemplateForCharacter(step.id, customTemplates)
+            {(() => {
+              const tpl =
+                step.type === 'role'
+                  ? getTemplateForCharacter(step.id, customTemplates)
+                  : getTemplateById(SPECIAL_TEMPLATES[step.id] ?? '', customTemplates)
               if (!tpl) return null
               return (
                 <button
-                  onClick={() => openComposer({
-                    draft: expandTemplate(tpl),
-                    templateId: tpl.id,
-                  })}
+                  onClick={() => {
+                    openComposer({
+                      draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId }),
+                      templateId: tpl.id,
+                    })
+                    goToPlayerInfo()
+                  }}
                   className="px-3 py-2 rounded bg-indigo-800 hover:bg-indigo-700 border border-indigo-600 text-sm text-indigo-200"
                 >
                   📋 Show info

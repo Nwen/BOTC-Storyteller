@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useGameStore } from '@/store/gameStore'
+import { useUiStore } from '@/store/uiStore'
+import type { ToolsTab } from '@/store/uiStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { resolveRoleText } from '@/lib/roleResolution'
 import { getTeamComposition, getAllCompositions } from '@/lib/teamComposition'
@@ -9,7 +11,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { InfoComposer } from '@/components/PlayerInfo/InfoComposer'
 import type { RoleBase } from '@/types'
 
-type Tab = 'info' | 'bluffs' | 'setup' | 'config' | 'notes'
+type Tab = ToolsTab
 
 const TABS: Tab[] = ['info', 'bluffs', 'setup', 'config', 'notes']
 
@@ -18,7 +20,8 @@ const TAB_LABELS: Record<Tab, string> = {
 }
 
 export function ToolsPanel() {
-  const [tab, setTab] = useState<Tab>('setup')
+  const tab = useUiStore((s) => s.toolsTab)
+  const setTab = useUiStore((s) => s.setToolsTab)
 
   return (
     <div className="h-full flex flex-col">

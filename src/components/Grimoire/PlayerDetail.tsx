@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
+import { useInfoStore } from '@/store/infoStore'
+import { useUiStore } from '@/store/uiStore'
 import { useRoleById, useRolePool } from '@/hooks/useRolePool'
 import { resolveRoleText } from '@/lib/roleResolution'
+import { hasFacade, shownRoleId } from '@/lib/facadeRoles'
+import { getTemplateForCharacter, expandTemplate } from '@/lib/infoResolution'
 import { CharacterIcon } from '@/components/ui/CharacterIcon'
 import { TeamBadge } from '@/components/ui/TeamBadge'
 import { CharacterPicker } from './CharacterPicker'
@@ -18,15 +22,26 @@ export function PlayerDetail({ player, onClose }: Props) {
   const {
     renamePlayer, removePlayer, setPlayerRole, setPlayerAlignment,
     killPlayer, revivePlayer, spendGhostVote, restoreGhostVote,
-    setPlayerNotes, addReminderToken, removeReminderToken,
+    setPlayerNotes, addReminderToken, removeReminderToken, setPlayerFacadeRole,
   } = useGameStore()
 
-  const { editOverrides, locales, activeLocale } = useLibraryStore()
+  const { editOverrides, locales, activeLocale, customTemplates } = useLibraryStore()
+  const openComposer = useInfoStore((s) => s.openComposer)
+  const goToPlayerInfo = useUiStore((s) => s.goToPlayerInfo)
   const role = useRoleById(player.roleId)
   const resolved = role ? resolveRoleText(role, editOverrides, locales, activeLocale) : null
   const rolePool = useRolePool()
 
+  // What the player believes they are: the façade for a Drunk/Marionette, their real role otherwise
+  const perceivedId = shownRoleId(player.roleId, player.facadeRoleId)
+  const perceivedRole = useRoleById(perceivedId)
+  const perceivedResolved = perceivedRole
+    ? resolveRoleText(perceivedRole, editOverrides, locales, activeLocale)
+    : null
+  const template = perceivedId ? getTemplateForCharacter(perceivedId, customTemplates) : undefined
+
   const [showPicker, setShowPicker] = useState(false)
+  const [showFacadePicker, setShowFacadePicker] = useState(false)
   const [showReminder, setShowReminder] = useState(false)
   const [editingName, setEditingName] = useState(false)
   const [nameValue, setNameValue] = useState(player.name)
@@ -38,6 +53,28 @@ export function PlayerDetail({ player, onClose }: Props) {
   const cycleAlignment = () => {
     const next = player.alignment === 'unknown' ? 'good' : player.alignment === 'good' ? 'evil' : 'unknown'
     setPlayerAlignment(player.id, next)
+  }
+
+  /** Seed the info composer with "YOU ARE <character>" and jump to it */
+  const showYouAre = () => {
+    if (!perceivedId) {
+      setShowFacadePicker(true)
+      return
+    }
+    openComposer({
+      draft: [
+        { kind: 'statement', key: 'you_are' },
+        { kind: 'character', roleId: perceivedId },
+      ],
+    })
+    goToPlayerInfo()
+  }
+
+  /** Load this character's info template into the composer and jump to it */
+  const prepareInfo = () => {
+    if (!template) return
+    openComposer({ draft: expandTemplate(template), templateId: template.id })
+    goToPlayerInfo()
   }
 
   return (
@@ -106,6 +143,25 @@ export function PlayerDetail({ player, onClose }: Props) {
           {resolved && (
             <p className="text-xs text-gray-500 mt-1.5 leading-snug">{resolved.displayAbility}</p>
           )}
+
+          {hasFacade(player.roleId) && (
+            <div className="mt-2.5">
+              <p className="text-xs text-gray-500 mb-1.5">Thinks they are</p>
+              <button
+                onClick={() => setShowFacadePicker(true)}
+                className="w-full flex items-center gap-2 rounded-lg bg-gray-800 hover:bg-gray-700 p-2 text-left border border-dashed border-gray-600"
+              >
+                {perceivedResolved && perceivedRole ? (
+                  <>
+                    <CharacterIcon role={perceivedRole} size={28} className="shrink-0" />
+                    <span className="text-sm truncate">{perceivedResolved.displayName}</span>
+                  </>
+                ) : (
+                  <span className="text-sm text-gray-500">Pick the façade character…</span>
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Status */}
@@ -150,6 +206,34 @@ export function PlayerDetail({ player, onClose }: Props) {
             >
               {alignmentLabel}
             </button>
+          </div>
+        </div>
+
+        {/* Show to player */}
+        <div>
+          <p className="text-xs text-gray-500 mb-1.5">Show to player</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={showYouAre}
+              disabled={!player.roleId}
+              className="px-3 py-2 rounded bg-indigo-800 hover:bg-indigo-700 border border-indigo-600 text-sm text-indigo-100 disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
+              title={
+                perceivedResolved
+                  ? `Show "YOU ARE ${perceivedResolved.displayName}"`
+                  : 'Pick the façade character first'
+              }
+            >
+              👁 &ldquo;You are…&rdquo;
+            </button>
+            {template && (
+              <button
+                onClick={prepareInfo}
+                className="px-3 py-2 rounded bg-gray-800 hover:bg-gray-700 border border-gray-700 text-sm min-h-[40px]"
+                title={`Load the ${perceivedResolved?.displayName ?? ''} info template`}
+              >
+                📋 Prepare info
+              </button>
+            )}
           </div>
         </div>
 
@@ -209,6 +293,12 @@ export function PlayerDetail({ player, onClose }: Props) {
         onClose={() => setShowPicker(false)}
         onSelect={(id) => setPlayerRole(player.id, id || null)}
         currentRoleId={player.roleId}
+      />
+      <CharacterPicker
+        open={showFacadePicker}
+        onClose={() => setShowFacadePicker(false)}
+        onSelect={(id) => setPlayerFacadeRole(player.id, id || null)}
+        currentRoleId={player.facadeRoleId ?? null}
       />
       <ReminderPicker
         open={showReminder}

@@ -83,6 +83,9 @@ export interface Player {
   name: string
   seatIndex: number     // 0-based position around the circle
   roleId: string | null
+  /** For roles whose player believes they are someone else (Drunk, Marionette):
+   *  the character they think they have. See lib/facadeRoles.ts */
+  facadeRoleId?: string | null
   alignment: Alignment
   isAlive: boolean
   ghostVoteAvailable: boolean
@@ -189,6 +192,15 @@ export interface LocaleData {
   templates?: Record<string, { label: string }>
 }
 
+/** A script the user imported, kept so it can be reloaded in a later session */
+export interface SavedScript {
+  id: string
+  /** Name shown in the picker — script meta name, else the imported filename */
+  name: string
+  savedAt: number
+  script: LoadedScript
+}
+
 export interface LibraryState {
   customRoles: RoleBase[]
   /** English-level edit overrides (layer 2) */
@@ -200,6 +212,8 @@ export interface LibraryState {
   customStatements: Record<string, string>
   /** Scripts loaded from public/scripts/ at startup — not persisted */
   bundledScripts: LoadedScript[]
+  /** Scripts the user imported — persisted */
+  savedScripts: SavedScript[]
 }
 
 // ─── Team composition ────────────────────────────────────────────────────────

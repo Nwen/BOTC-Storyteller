@@ -4,17 +4,22 @@ import { useLibraryStore } from '@/store/libraryStore'
 import { parseScriptFile, BASE_SCRIPTS } from '@/lib/scriptImport'
 import { useResolvedRoles } from '@/hooks/useRoleResolution'
 import { TeamBadge } from '@/components/ui/TeamBadge'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { CharacterIcon } from '@/components/ui/CharacterIcon'
-import type { Team } from '@/types'
+import type { Team, SavedScript } from '@/types'
 
 const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled']
 
 export function ScriptManager() {
   const { script, loadScript } = useGameStore()
   const bundledScripts = useLibraryStore((s) => s.bundledScripts)
+  const savedScripts = useLibraryStore((s) => s.savedScripts)
+  const saveScript = useLibraryStore((s) => s.saveScript)
+  const removeSavedScript = useLibraryStore((s) => s.removeSavedScript)
   const [warnings, setWarnings] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
+  const [pendingDelete, setPendingDelete] = useState<SavedScript | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const handleFile = useCallback(async (file: File) => {
@@ -24,11 +29,12 @@ export function ScriptManager() {
       const text = await file.text()
       const { script: loaded, warnings: w } = parseScriptFile(text)
       loadScript(loaded)
+      saveScript(loaded, file.name.replace(/\.json$/i, ''))
       setWarnings(w)
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     }
-  }, [loadScript])
+  }, [loadScript, saveScript])
 
   // Drag-and-drop on the whole section
   const onDragOver = (e: React.DragEvent) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy' }
@@ -91,10 +97,40 @@ export function ScriptManager() {
           />
         </div>
 
+        {/* Imported scripts, kept across sessions */}
+        {savedScripts.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            <span className="text-xs text-gray-500 self-center">Saved:</span>
+            {savedScripts.map((entry) => (
+              <div
+                key={entry.id}
+                className="flex items-stretch rounded overflow-hidden border border-gray-600 bg-gray-700"
+              >
+                <button
+                  onClick={() => { loadScript(entry.script); setWarnings([]); setError(null) }}
+                  className="px-3 py-1.5 text-sm hover:bg-gray-600"
+                >
+                  {entry.name}
+                  {entry.script.meta.author && (
+                    <span className="text-gray-400 ml-1 text-xs">— {entry.script.meta.author}</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => setPendingDelete(entry)}
+                  className="px-2 text-gray-400 hover:bg-red-900 hover:text-red-200 border-l border-gray-600"
+                  title={`Delete "${entry.name}"`}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Scripts from public/scripts/ folder */}
         {bundledScripts.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            <span className="text-xs text-gray-500 self-center">Saved:</span>
+            <span className="text-xs text-gray-500 self-center">Bundled:</span>
             {bundledScripts.map((s) => (
               <button
                 key={s.meta.name ?? ''}
@@ -124,6 +160,19 @@ export function ScriptManager() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        onCancel={() => setPendingDelete(null)}
+        onConfirm={() => {
+          if (pendingDelete) removeSavedScript(pendingDelete.id)
+          setPendingDelete(null)
+        }}
+        title="Delete saved script"
+        message={`Remove "${pendingDelete?.name ?? ''}" from your saved scripts? The currently loaded script is not affected.`}
+        confirmLabel="Delete"
+        danger
+      />
 
       {/* Search */}
       {script && (

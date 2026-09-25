@@ -30,3 +30,14 @@ export function useRoleById(id: string | null | undefined): RoleBase | null {
     return ROLE_MAP.get(id) ?? null
   }, [id, customRoles])
 }
+
+/** The player currently holding a demon-team character, if any */
+export function useDemonPlayerId(): string | null {
+  const players = useGameStore((s) => s.players)
+  const pool = useRolePool()
+
+  return useMemo(() => {
+    const demonIds = new Set(pool.filter((r) => r.team === 'demon').map((r) => r.id))
+    return players.find((p) => p.roleId && demonIds.has(p.roleId))?.id ?? null
+  }, [players, pool])
+}

@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
+import { useUiStore } from '@/store/uiStore'
+import type { View } from '@/store/uiStore'
 import { loadBundledLocales } from '@/lib/loadBundledLocales'
 import { loadBundledScripts } from '@/lib/loadBundledScripts'
 import { PresentationMode } from '@/components/PlayerInfo/PresentationMode'
@@ -11,8 +13,6 @@ import { DayPhase } from '@/components/DayPhase/DayPhase'
 import { CharacterLibrary } from '@/components/CharacterLibrary/CharacterLibrary'
 import { ToolsPanel } from '@/components/Tools/ToolsPanel'
 import { GameLog } from '@/components/GameLog/GameLog'
-
-type View = 'grimoire' | 'script' | 'night' | 'day' | 'library' | 'tools' | 'log'
 
 interface NavItem {
   id: View
@@ -31,7 +31,8 @@ const NAV: NavItem[] = [
 ]
 
 export default function App() {
-  const [view, setView] = useState<View>('tools')
+  const view = useUiStore((s) => s.view)
+  const setView = useUiStore((s) => s.setView)
   const { phase, day } = useGameStore()
   const { activeLocale, locales } = useLibraryStore()
 

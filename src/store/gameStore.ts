@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { nanoid } from '@/lib/nanoid'
 import { getTeamComposition } from '@/lib/teamComposition'
+import { hasFacade } from '@/lib/facadeRoles'
 import type {
   GameState, GamePhase, Player, Nomination, VoteChoice, LogEntry, LogEntryKind,
   LoadedScript, Alignment, ReminderToken,
@@ -32,6 +33,7 @@ interface GameActions {
   renamePlayer: (id: string, name: string) => void
   reorderPlayers: (orderedIds: string[]) => void
   setPlayerRole: (id: string, roleId: string | null) => void
+  setPlayerFacadeRole: (id: string, roleId: string | null) => void
   setPlayerAlignment: (id: string, alignment: Alignment) => void
   killPlayer: (id: string) => void
   revivePlayer: (id: string) => void
@@ -120,6 +122,7 @@ export const useGameStore = create<GameState & GameActions>()(
           name,
           seatIndex: players.length,
           roleId: null,
+          facadeRoleId: null,
           alignment: 'unknown',
           isAlive: true,
           ghostVoteAvailable: true,
@@ -146,7 +149,19 @@ export const useGameStore = create<GameState & GameActions>()(
         })),
 
       setPlayerRole: (id, roleId) =>
-        set((s) => ({ players: s.players.map((p) => p.id === id ? { ...p, roleId } : p) })),
+        set((s) => ({
+          players: s.players.map((p) =>
+            p.id === id
+              // A façade only means something for the roles that have one
+              ? { ...p, roleId, facadeRoleId: hasFacade(roleId) ? p.facadeRoleId ?? null : null }
+              : p,
+          ),
+        })),
+
+      setPlayerFacadeRole: (id, roleId) =>
+        set((s) => ({
+          players: s.players.map((p) => p.id === id ? { ...p, facadeRoleId: roleId } : p),
+        })),
 
       setPlayerAlignment: (id, alignment) =>
         set((s) => ({ players: s.players.map((p) => p.id === id ? { ...p, alignment } : p) })),
@@ -282,7 +297,7 @@ export const useGameStore = create<GameState & GameActions>()(
             if (!role) return p
             const alignment: Alignment =
               role.team === 'townsfolk' || role.team === 'outsider' ? 'good' : 'evil'
-            return { ...p, roleId: role.id, alignment }
+            return { ...p, roleId: role.id, facadeRoleId: null, alignment }
           }),
         })
       },
@@ -301,6 +316,7 @@ export const useGameStore = create<GameState & GameActions>()(
             reminders: [],
             notes: '',
             roleId: null,
+            facadeRoleId: null,
             alignment: 'unknown',
           })),
           iconBaseUrl: s.iconBaseUrl,

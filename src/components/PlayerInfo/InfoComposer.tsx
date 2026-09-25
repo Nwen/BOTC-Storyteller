@@ -3,7 +3,8 @@ import { useInfoStore } from '@/store/infoStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { useGameStore } from '@/store/gameStore'
 import { useAllResolvedRoles } from '@/hooks/useRoleResolution'
-import { getAllTemplates, expandTemplate, resolveStatement, resolveTemplateLabel } from '@/lib/infoResolution'
+import { useDemonPlayerId } from '@/hooks/useRolePool'
+import { getAllTemplates, expandTemplateForGame, resolveStatement, resolveTemplateLabel } from '@/lib/infoResolution'
 import { CharacterPicker } from '@/components/Grimoire/CharacterPicker'
 import { AtomRenderer } from './AtomRenderer'
 import ENGLISH_STATEMENTS from '@/data/statements.json'
@@ -22,6 +23,7 @@ export function InfoComposer() {
   const { locales, activeLocale, customStatements, customTemplates } = useLibraryStore()
   const { players, bluffs } = useGameStore()
   const allRoles = useAllResolvedRoles()
+  const demonPlayerId = useDemonPlayerId()
   const [charPickerIndex, setCharPickerIndex] = useState<number | null>(null)
   const templates = getAllTemplates(customTemplates)
 
@@ -32,16 +34,10 @@ export function InfoComposer() {
   const handleLoadTemplate = (id: string) => {
     const tpl = templates.find((t) => t.id === id)
     if (!tpl) return
-    let expanded = expandTemplate(tpl)
-    if ((id === 'demon_info' || id === 'minion_info') && bluffs.length > 0) {
-      let bluffIdx = 0
-      expanded = expanded.map((atom) =>
-        atom.kind === 'character' && bluffIdx < bluffs.length
-          ? { ...atom, roleId: bluffs[bluffIdx++] }
-          : atom
-      )
-    }
-    useInfoStore.getState().openComposer({ draft: expanded, templateId: id })
+    useInfoStore.getState().openComposer({
+      draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId }),
+      templateId: id,
+    })
   }
 
   const handleShowToPlayer = () => {
