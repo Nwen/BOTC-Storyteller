@@ -11,6 +11,20 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+        // Character icons are fetched from remote hosts; keep every one seen for offline play
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) =>
+              url.origin === 'https://release.botc.app' ||
+              url.href.startsWith('https://raw.githubusercontent.com/tomozbot/botc-icons/'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'character-icons',
+              expiration: { maxEntries: 1000, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
       manifest: {
         name: 'BotC Storyteller',

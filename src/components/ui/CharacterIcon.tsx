@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useGameStore } from '@/store/gameStore'
-import type { RoleBase, Team } from '@/types'
+import { iconCandidates, isPaddedIconUrl, PADDED_ICON_ZOOM } from '@/lib/characterIcons'
+import type { Alignment, RoleBase, Team } from '@/types'
 
 const TEAM_BG: Record<Team, string> = {
   townsfolk: 'bg-blue-800',
@@ -21,26 +22,33 @@ interface Props {
    * The parent must be position:relative with overflow:hidden.
    */
   fill?: boolean
+  /** The player's current alignment, to pick the good / evil art variant. */
+  alignment?: Alignment
   className?: string
 }
 
-export function CharacterIcon({ role, size = 48, fill = false, className = '' }: Props) {
+export function CharacterIcon({ role, size = 48, fill = false, alignment, className = '' }: Props) {
+  const iconSource = useGameStore((s) => s.iconSource)
   const iconBaseUrl = useGameStore((s) => s.iconBaseUrl)
-  const [imgError, setImgError] = useState(false)
+  // URLs that failed to load; the next candidate is tried, then the initials badge
+  const [failed, setFailed] = useState<ReadonlySet<string>>(new Set())
 
-  const iconUrl = role.image ? role.image : `${iconBaseUrl}${role.id}.png`
+  const iconUrl = iconCandidates(role, iconSource, iconBaseUrl, alignment).find((u) => !failed.has(u))
+  const onError = () => iconUrl && setFailed((f) => new Set(f).add(iconUrl))
+  const zoom = iconUrl && isPaddedIconUrl(iconUrl) ? { transform: `scale(${PADDED_ICON_ZOOM})` } : undefined
   const team = role.team as Team
   const bg = TEAM_BG[team] ?? 'bg-gray-700'
 
   if (fill) {
     // Fill the parent positioned container — no fixed dimensions
-    if (!imgError) {
+    if (iconUrl) {
       return (
         <img
           src={iconUrl}
           alt={role.name}
           className={`absolute inset-0 w-full h-full object-cover object-center ${className}`}
-          onError={() => setImgError(true)}
+          style={zoom}
+          onError={onError}
         />
       )
     }
@@ -57,17 +65,24 @@ export function CharacterIcon({ role, size = 48, fill = false, className = '' }:
   }
 
   // Fixed-size mode (default — used in lists, pickers, etc.)
-  if (!imgError) {
+  if (iconUrl) {
+    // The box (size, rings, borders from className) stays fixed; only the artwork
+    // inside is zoomed, so neighbouring icons never overlap
     return (
-      <img
-        src={iconUrl}
-        alt={role.name}
-        width={size}
-        height={size}
-        className={`rounded-full object-cover object-center ${className}`}
+      <div
+        className={`rounded-full ${className}`}
         style={{ width: size, height: size }}
-        onError={() => setImgError(true)}
-      />
+      >
+        <img
+          src={iconUrl}
+          alt={role.name}
+          width={size}
+          height={size}
+          className="block w-full h-full rounded-full object-cover object-center pointer-events-none"
+          style={zoom}
+          onError={onError}
+        />
+      </div>
     )
   }
 

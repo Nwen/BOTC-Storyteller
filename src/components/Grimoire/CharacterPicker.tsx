@@ -14,9 +14,13 @@ interface Props {
   onClose: () => void
   onSelect: (roleId: string) => void
   currentRoleId?: string | null
+  /** Characters already held by a player: listed last in each team and greyed out (still selectable) */
+  takenRoleIds?: ReadonlySet<string>
+  /** The teams this pick is expected from: listed first, the other teams greyed out (still selectable) */
+  preferredTeams?: Team[]
 }
 
-export function CharacterPicker({ open, onClose, onSelect, currentRoleId }: Props) {
+export function CharacterPicker({ open, onClose, onSelect, currentRoleId, takenRoleIds, preferredTeams }: Props) {
   const [search, setSearch] = useState('')
   const script = useGameStore((s) => s.script)
   const customRoles = useLibraryStore((s) => s.customRoles)
@@ -50,9 +54,14 @@ export function CharacterPicker({ open, onClose, onSelect, currentRoleId }: Prop
     return true
   })
 
-  const byTeam = TEAM_ORDER.map((team) => ({
+  const isPreferred = (team: Team) => !preferredTeams || preferredTeams.includes(team)
+  const teamOrder = [...TEAM_ORDER.filter(isPreferred), ...TEAM_ORDER.filter((t) => !isPreferred(t))]
+  const byTeam = teamOrder.map((team) => ({
     team,
-    roles: filtered.filter((r) => r.team === team),
+    roles: filtered
+      .filter((r) => r.team === team)
+      // stable sort: available characters first, keeping the original order within each group
+      .sort((a, b) => Number(!!takenRoleIds?.has(a.id)) - Number(!!takenRoleIds?.has(b.id))),
   })).filter((g) => g.roles.length > 0)
 
   return (
@@ -78,7 +87,7 @@ export function CharacterPicker({ open, onClose, onSelect, currentRoleId }: Prop
 
       <div className="p-4 space-y-4">
         {byTeam.map(({ team, roles }) => (
-          <div key={team}>
+          <div key={team} className={isPreferred(team) ? '' : 'opacity-40'}>
             <p className={`text-xs font-semibold uppercase tracking-wide mb-1.5 team-${team}`}>{team}</p>
             <div className="grid grid-cols-2 gap-1">
               {roles.map((role) => (
@@ -87,7 +96,9 @@ export function CharacterPicker({ open, onClose, onSelect, currentRoleId }: Prop
                   onClick={() => { onSelect(role.id); onClose() }}
                   className={`flex items-center gap-2 rounded-lg p-2 text-left transition-colors
                     ${currentRoleId === role.id ? 'bg-blue-800 border border-blue-500' : 'bg-gray-800 hover:bg-gray-700 border border-transparent'}
+                    ${takenRoleIds?.has(role.id) && currentRoleId !== role.id ? 'opacity-40' : ''}
                   `}
+                  title={takenRoleIds?.has(role.id) ? 'Already assigned to a player' : undefined}
                 >
                   <CharacterIcon role={role} size={32} className="shrink-0" />
                   <span className="text-sm font-medium truncate">{role.displayName}</span>

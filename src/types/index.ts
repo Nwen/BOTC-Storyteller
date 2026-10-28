@@ -132,6 +132,14 @@ export type GamePhase = 'setup' | 'night' | 'dawn' | 'day' | 'dusk'
 
 // ─── Full game state (persisted) ──────────────────────────────────────────────
 
+/**
+ * Where character icons come from.
+ * - official:  The Pandemonium Institute's hosted assets (https://release.botc.app/resources/)
+ * - alternate: tomozbot's playtest-art collection (https://github.com/tomozbot/botc-icons)
+ * - custom:    <iconBaseUrl><role_id>.png
+ */
+export type IconSource = 'official' | 'alternate' | 'custom'
+
 export interface GameState {
   phase: GamePhase
   day: number
@@ -141,6 +149,8 @@ export interface GameState {
   globalNotes: string
   bluffs: string[]    // role ids shown to demon as bluffs
   script: LoadedScript | null
+  iconSource: IconSource
+  /** Only used when iconSource is 'custom' */
   iconBaseUrl: string
 }
 
@@ -149,16 +159,22 @@ export interface GameState {
 export type DraftAtom =
   | { kind: 'statement';  key: string }
   | { kind: 'player';     playerId: string | null }
-  | { kind: 'character';  roleId: string | null; filter?: { team?: Team } }
+  | { kind: 'character';  roleId: string | null; filter?: CharacterFilter }
   | { kind: 'team';       value: 'good' | 'evil' | Team | null }
   | { kind: 'yesno';      value: boolean }
   | { kind: 'number';     value: number; max?: number }
   | { kind: 'free_text';  text: string }
 
+/** What a character slot is expected to hold: one team, or any character of one alignment */
+export interface CharacterFilter {
+  team?: Team
+  alignment?: 'good' | 'evil'
+}
+
 export type TemplateAtom =
   | { kind: 'statement';  key: string }
   | { kind: 'player';     slots: number }
-  | { kind: 'character';  filter?: { team?: Team } }
+  | { kind: 'character';  roleId?: string; filter?: CharacterFilter }
   | { kind: 'team' }
   | { kind: 'yesno' }
   | { kind: 'number';     max?: number }

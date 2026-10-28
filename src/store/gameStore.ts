@@ -3,9 +3,10 @@ import { persist } from 'zustand/middleware'
 import { nanoid } from '@/lib/nanoid'
 import { getTeamComposition } from '@/lib/teamComposition'
 import { hasFacade } from '@/lib/facadeRoles'
+import { useNightStore } from './nightStore'
 import type {
   GameState, GamePhase, Player, Nomination, VoteChoice, LogEntry, LogEntryKind,
-  LoadedScript, Alignment, ReminderToken,
+  LoadedScript, Alignment, ReminderToken, IconSource,
 } from '@/types'
 
 function shuffle<T>(arr: T[]): T[] {
@@ -58,6 +59,7 @@ interface GameActions {
   removeBluff: (roleId: string) => void
 
   // Config
+  setIconSource: (source: IconSource) => void
   setIconBaseUrl: (url: string) => void
 
   // Role assignment
@@ -92,7 +94,8 @@ const DEFAULT_STATE: GameState = {
   globalNotes: '',
   bluffs: [],
   script: null,
-  iconBaseUrl: '/assets/icons/Icon_',
+  iconSource: 'official',
+  iconBaseUrl: '',
 }
 
 // ─── Store ───────────────────────────────────────────────────────────────────
@@ -268,6 +271,7 @@ export const useGameStore = create<GameState & GameActions>()(
       removeBluff: (roleId) => set((s) => ({ bluffs: s.bluffs.filter((b) => b !== roleId) })),
 
       // ── Config ──
+      setIconSource: (source) => set({ iconSource: source }),
       setIconBaseUrl: (url) => set({ iconBaseUrl: url }),
 
       // ── Role assignment ──
@@ -303,9 +307,13 @@ export const useGameStore = create<GameState & GameActions>()(
       },
 
       // ── Game control ──
-      newGame: () => set({ ...DEFAULT_STATE }),
+      newGame: () => {
+        useNightStore.getState().resetForDay(DEFAULT_STATE.day)
+        set({ ...DEFAULT_STATE })
+      },
 
-      newGameKeepPlayersAndScript: () =>
+      newGameKeepPlayersAndScript: () => {
+        useNightStore.getState().resetForDay(DEFAULT_STATE.day)
         set((s) => ({
           ...DEFAULT_STATE,
           script: s.script,
@@ -319,8 +327,10 @@ export const useGameStore = create<GameState & GameActions>()(
             facadeRoleId: null,
             alignment: 'unknown',
           })),
+          iconSource: s.iconSource,
           iconBaseUrl: s.iconBaseUrl,
-        })),
+        }))
+      },
 
       exportGameState: () => JSON.stringify(get(), null, 2),
 
@@ -335,7 +345,18 @@ export const useGameStore = create<GameState & GameActions>()(
     }),
     {
       name: 'botc-game',
+      version: 1,
       partialize: ({ phase: _phase, day: _day, ...rest }) => rest,
+      migrate: (persisted, version) => {
+        const s = persisted as Partial<GameState>
+        if (version < 1) {
+          // v0 had only iconBaseUrl, defaulting to icons that were never part of the build
+          const legacy = !s.iconBaseUrl || s.iconBaseUrl === '/assets/icons/Icon_'
+          s.iconSource = legacy ? 'official' : 'custom'
+          if (legacy) s.iconBaseUrl = ''
+        }
+        return s as GameState & GameActions
+      },
     },
   ),
 )

@@ -27,19 +27,20 @@ export function buildNightOrder(
   // Characters actually in play
   const inPlayIds = new Set(players.map((p) => p.roleId).filter(Boolean) as string[])
 
-  // Determine ordered role list
+  // Determine ordered role list, always resolving against the full (translated) role pool
   let ordered: RoleBase[]
   const metaOrder = night === 'first' ? script.metaFirstNight : script.metaOtherNight
+  const roleById = new Map(allRoles.map((r) => [r.id, r]))
 
   if (metaOrder) {
-    // Use explicit meta order, resolving ids against full role pool
-    const roleById = new Map(allRoles.map((r) => [r.id, r]))
+    // Use explicit meta order
     ordered = metaOrder
       .filter((id) => !['dusk', 'minioninfo', 'demoninfo', 'dawn'].includes(id))
       .map((id) => roleById.get(id))
       .filter((r): r is RoleBase => r !== undefined && (includeAll || inPlayIds.has(r.id)))
   } else {
-    const pool = includeAll ? script.roles : script.roles.filter((r) => inPlayIds.has(r.id))
+    const pool = (includeAll ? script.roles : script.roles.filter((r) => inPlayIds.has(r.id)))
+      .map((r) => roleById.get(r.id) ?? r)
     ordered = pool
       .filter((r) => (r[roleField] ?? 0) > 0)
       .sort((a, b) => (a[roleField] ?? 0) - (b[roleField] ?? 0))

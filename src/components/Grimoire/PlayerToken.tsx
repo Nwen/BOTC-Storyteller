@@ -98,7 +98,7 @@ export function PlayerToken({ player, x, y, tokenSize, isSelected, hidden, onSel
               {hidden ? '' : '?'}
             </div>
           ) : (
-            <CharacterIcon role={role} fill />
+            <CharacterIcon role={role} alignment={player.alignment} fill />
           )}
 
           {/* Dead overlay */}

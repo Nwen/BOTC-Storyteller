@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { useInfoStore } from '@/store/infoStore'
@@ -6,12 +6,12 @@ import { useUiStore } from '@/store/uiStore'
 import { useRoleById, useRolePool } from '@/hooks/useRolePool'
 import { resolveRoleText } from '@/lib/roleResolution'
 import { hasFacade, shownRoleId } from '@/lib/facadeRoles'
-import { getTemplateForCharacter, expandTemplate } from '@/lib/infoResolution'
+import { getTemplateForCharacter, expandTemplate, compositionToLogText } from '@/lib/infoResolution'
 import { CharacterIcon } from '@/components/ui/CharacterIcon'
 import { TeamBadge } from '@/components/ui/TeamBadge'
 import { CharacterPicker } from './CharacterPicker'
 import { ReminderPicker } from './ReminderPicker'
-import type { Player } from '@/types'
+import type { DraftAtom, Player } from '@/types'
 
 interface Props {
   player: Player
@@ -23,10 +23,12 @@ export function PlayerDetail({ player, onClose }: Props) {
     renamePlayer, removePlayer, setPlayerRole, setPlayerAlignment,
     killPlayer, revivePlayer, spendGhostVote, restoreGhostVote,
     setPlayerNotes, addReminderToken, removeReminderToken, setPlayerFacadeRole,
+    addLogEntry, players, bluffs,
   } = useGameStore()
 
   const { editOverrides, locales, activeLocale, customTemplates } = useLibraryStore()
   const openComposer = useInfoStore((s) => s.openComposer)
+  const presentDraft = useInfoStore((s) => s.presentDraft)
   const goToPlayerInfo = useUiStore((s) => s.goToPlayerInfo)
   const role = useRoleById(player.roleId)
   const resolved = role ? resolveRoleText(role, editOverrides, locales, activeLocale) : null
@@ -42,6 +44,10 @@ export function PlayerDetail({ player, onClose }: Props) {
 
   const [showPicker, setShowPicker] = useState(false)
   const [showFacadePicker, setShowFacadePicker] = useState(false)
+  const takenRoleIds = useMemo(
+    () => new Set(players.flatMap((p) => (p.roleId ? [p.roleId] : []))),
+    [players],
+  )
   const [showReminder, setShowReminder] = useState(false)
   const [editingName, setEditingName] = useState(false)
   const [nameValue, setNameValue] = useState(player.name)
@@ -55,19 +61,29 @@ export function PlayerDetail({ player, onClose }: Props) {
     setPlayerAlignment(player.id, next)
   }
 
-  /** Seed the info composer with "YOU ARE <character>" and jump to it */
+  /** Show "YOU ARE <character>" to the player straight away, without the composer */
   const showYouAre = () => {
     if (!perceivedId) {
       setShowFacadePicker(true)
       return
     }
-    openComposer({
-      draft: [
-        { kind: 'statement', key: 'you_are' },
-        { kind: 'character', roleId: perceivedId },
-      ],
-    })
-    goToPlayerInfo()
+    const draft: DraftAtom[] = [
+      { kind: 'statement', key: 'you_are' },
+      { kind: 'character', roleId: perceivedId },
+    ]
+    presentDraft(draft)
+    addLogEntry('info_reveal', `Showed info: ${compositionToLogText(draft, players, () => perceivedRole?.name ?? perceivedId)}`)
+  }
+
+  /** Show the Demon bluffs to the player straight away, without the composer */
+  const showBluffs = () => {
+    const draft: DraftAtom[] = [
+      { kind: 'statement', key: 'demon_bluffs' },
+      ...bluffs.map((roleId): DraftAtom => ({ kind: 'character', roleId })),
+    ]
+    presentDraft(draft)
+    const roleName = (id: string) => rolePool.find((r) => r.id === id)?.name ?? id
+    addLogEntry('info_reveal', `Showed info: ${compositionToLogText(draft, players, roleName)}`)
   }
 
   /** Load this character's info template into the composer and jump to it */
@@ -130,7 +146,7 @@ export function PlayerDetail({ player, onClose }: Props) {
           >
             {resolved && role ? (
               <>
-                <CharacterIcon role={role} size={44} className="shrink-0" />
+                <CharacterIcon role={role} alignment={player.alignment} size={44} className="shrink-0" />
                 <div className="min-w-0">
                   <p className="font-medium text-sm">{resolved.displayName}</p>
                   <TeamBadge team={role.team} />
@@ -225,6 +241,17 @@ export function PlayerDetail({ player, onClose }: Props) {
             >
               👁 &ldquo;You are…&rdquo;
             </button>
+            {/* The Lunatic believes they are the Demon, so gets (fake) bluffs too */}
+            {(role?.team === 'demon' || role?.id === 'lunatic') && (
+              <button
+                onClick={showBluffs}
+                disabled={bluffs.length === 0}
+                className="px-3 py-2 rounded bg-red-900 hover:bg-red-800 border border-red-700 text-sm text-red-100 disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px]"
+                title={bluffs.length > 0 ? 'Show the Demon bluffs' : 'Set the Demon bluffs first'}
+              >
+                🎭 Bluffs
+              </button>
+            )}
             {template && (
               <button
                 onClick={prepareInfo}
@@ -243,7 +270,7 @@ export function PlayerDetail({ player, onClose }: Props) {
             <p className="text-xs text-gray-500">Reminders</p>
             <button
               onClick={() => setShowReminder(true)}
-              className="text-xs text-blue-400 hover:text-blue-300"
+              className="px-4 min-h-[44px] rounded-lg bg-blue-900/60 hover:bg-blue-800 border border-blue-700 text-base font-medium text-blue-200"
             >
               + Add
             </button>
@@ -299,6 +326,7 @@ export function PlayerDetail({ player, onClose }: Props) {
         onClose={() => setShowFacadePicker(false)}
         onSelect={(id) => setPlayerFacadeRole(player.id, id || null)}
         currentRoleId={player.facadeRoleId ?? null}
+        takenRoleIds={takenRoleIds}
       />
       <ReminderPicker
         open={showReminder}

@@ -4,6 +4,7 @@ import { useAllResolvedRoles } from '@/hooks/useRoleResolution'
 import { resolveStatement, resolveYesNo } from '@/lib/infoResolution'
 import { TEAM_LABELS } from '@/components/ui/TeamBadge'
 import { CharacterIcon } from '@/components/ui/CharacterIcon'
+import { genericTeamIconUrl } from '@/lib/characterIcons'
 import type { DraftAtom, Team } from '@/types'
 
 const TEAM_COLORS: Record<string, string> = {
@@ -17,7 +18,14 @@ const TEAM_COLORS: Record<string, string> = {
   fabled:    'text-yellow-300',
 }
 
-type Size = 'preview' | 'full'
+/** 'grouped': full-screen, but sharing the screen with other characters (e.g. bluffs) */
+type Size = 'preview' | 'full' | 'grouped'
+
+/**
+ * Statements illustrated with a team's generic icon. Generic on purpose: Minions
+ * learn who the Demon is, not which Demon it is.
+ */
+const STATEMENT_TEAM_ICONS: Record<string, Team> = { the_demon_is: 'demon', these_are_your_minions: 'minion' }
 
 interface Props {
   atom: DraftAtom
@@ -40,11 +48,22 @@ function StatementAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kin
   const { locales, activeLocale, customStatements } = useLibraryStore()
   const sm = size === 'preview'
   const text = resolveStatement(atom.key, locales, activeLocale, customStatements)
-  return (
+  const iconTeam = STATEMENT_TEAM_ICONS[atom.key]
+  const statement = (
     <div className={`font-bold text-yellow-300 uppercase tracking-widest text-center leading-tight ${
-      sm ? 'text-xs' : 'text-4xl md:text-5xl lg:text-6xl'
+      sm ? 'text-sm' : 'text-5xl md:text-6xl lg:text-7xl'
     }`}>
       {text}
+    </div>
+  )
+  if (!iconTeam) return statement
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <CharacterIcon
+        role={{ id: iconTeam, name: text, team: iconTeam, image: genericTeamIconUrl(iconTeam) }}
+        size={sm ? 56 : 250}
+      />
+      {statement}
     </div>
   )
 }
@@ -54,14 +73,14 @@ function PlayerAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kind: 
   const sm = size === 'preview'
   const player = atom.playerId ? players.find((p) => p.id === atom.playerId) : null
   if (!player) {
-    return <div className={`italic text-gray-500 text-center ${sm ? 'text-xs' : 'text-2xl'}`}>[Player]</div>
+    return <div className={`italic text-gray-500 text-center ${sm ? 'text-sm' : 'text-3xl'}`}>[Player]</div>
   }
   return (
     <div className="text-center">
-      <div className={`font-black text-white leading-tight ${sm ? 'text-sm' : 'text-5xl md:text-6xl lg:text-7xl'}`}>
+      <div className={`font-black text-white leading-tight ${sm ? 'text-base' : 'text-6xl md:text-7xl lg:text-8xl'}`}>
         {player.name}
       </div>
-      <div className={`text-gray-400 font-medium mt-1 ${sm ? 'text-xs' : 'text-xl md:text-2xl'}`}>
+      <div className={`text-gray-400 font-medium mt-1 ${sm ? 'text-sm' : 'text-2xl md:text-3xl'}`}>
         Seat {player.seatIndex + 1}
       </div>
     </div>
@@ -73,12 +92,14 @@ function CharacterAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kin
   const sm = size === 'preview'
   const role = atom.roleId ? allRoles.find((r) => r.id === atom.roleId) : null
   if (!role) {
-    return <div className={`italic text-gray-500 text-center ${sm ? 'text-xs' : 'text-2xl'}`}>[Character]</div>
+    return <div className={`italic text-gray-500 text-center ${sm ? 'text-sm' : 'text-3xl'}`}>[Character]</div>
   }
   return (
     <div className="flex flex-col items-center gap-3">
-      <CharacterIcon role={role} size={sm ? 36 : 250} />
-      <span className={`font-black text-white text-center leading-tight ${sm ? 'text-xs' : 'text-3xl md:text-4xl'}`}>
+      <CharacterIcon role={role} size={sm ? 56 : size === 'grouped' ? 200 : 250} />
+      <span className={`font-black text-white text-center leading-tight ${
+        sm ? 'text-sm' : size === 'grouped' ? 'text-3xl md:text-4xl' : 'text-4xl md:text-5xl lg:text-6xl'
+      }`}>
         {role.displayName}
       </span>
     </div>
@@ -89,16 +110,23 @@ function TeamAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kind: 't
   const { locales, activeLocale } = useLibraryStore()
   const sm = size === 'preview'
   if (!atom.value) {
-    return <div className={`italic text-gray-500 text-center ${sm ? 'text-xs' : 'text-2xl'}`}>[Team]</div>
+    return <div className={`italic text-gray-500 text-center ${sm ? 'text-sm' : 'text-3xl'}`}>[Team]</div>
   }
   const color = TEAM_COLORS[atom.value] ?? 'text-white'
   const teamNames = locales[activeLocale]?.teams
   const label = (teamNames?.[atom.value] ?? TEAM_LABELS[atom.value as Team] ?? atom.value).toUpperCase()
+  const iconTeam: Team = atom.value === 'good' ? 'townsfolk' : atom.value === 'evil' ? 'demon' : atom.value
   return (
-    <div className={`font-black uppercase text-center leading-none ${color} ${
-      sm ? 'text-lg' : 'text-6xl md:text-7xl lg:text-8xl'
-    }`}>
-      {label}
+    <div className="flex flex-col items-center gap-3">
+      <CharacterIcon
+        role={{ id: atom.value, name: label, team: iconTeam, image: genericTeamIconUrl(atom.value) }}
+        size={sm ? 56 : 250}
+      />
+      <div className={`font-black uppercase text-center leading-none ${color} ${
+        sm ? 'text-xl' : 'text-6xl md:text-7xl lg:text-8xl'
+      }`}>
+        {label}
+      </div>
     </div>
   )
 }
@@ -110,7 +138,7 @@ function YesNoAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kind: '
   return (
     <div className={`font-black text-center leading-none ${
       atom.value ? 'text-green-400' : 'text-red-400'
-    } ${sm ? 'text-2xl' : 'text-[10rem] md:text-[14rem]'}`}>
+    } ${sm ? 'text-3xl' : 'text-[10rem] md:text-[14rem]'}`}>
       {text}
     </div>
   )
@@ -120,7 +148,7 @@ function NumberAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kind: 
   const sm = size === 'preview'
   return (
     <div className={`font-black text-white text-center leading-none ${
-      sm ? 'text-3xl' : 'text-[10rem] md:text-[14rem]'
+      sm ? 'text-4xl' : 'text-[10rem] md:text-[14rem]'
     }`}>
       {atom.value}
     </div>
@@ -131,7 +159,7 @@ function FreeTextAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kind
   const sm = size === 'preview'
   return (
     <div className={`font-bold text-white text-center leading-snug ${
-      sm ? 'text-xs' : 'text-4xl md:text-5xl lg:text-6xl'
+      sm ? 'text-sm' : 'text-5xl md:text-6xl lg:text-7xl'
     }`}>
       {atom.text || <span className="italic text-gray-500">[Free text]</span>}
     </div>

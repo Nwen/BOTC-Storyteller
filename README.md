@@ -20,7 +20,7 @@ networking, no server.
 - **Library** — create custom homebrew roles, edit official role text,
   import community translations, and manage reusable player-info templates.
 - **Tools** — player info sheets/statements, demon bluffs, setup composition
-  helper, icon base URL config, and game-state export/import/reset.
+  helper, icon source config, and game-state export/import/reset.
 - **Log** — chronological event log with manual annotations, exportable as
   plain text.
 - **Presentation mode** — fullscreen overlay for showing info to a player.
@@ -141,20 +141,23 @@ The importer also accepts the alternative flat-array shape
 4. Click **Export custom roles** to get a JSON file importable into other BotC
    tools (standard custom-script character shape).
 
-## Icon base URL
+## Character icons
 
-By default, icons are loaded from the bra1n/townsquare GitHub repo at runtime.
-To use local assets (or a self-hosted folder), go to **Tools → Config** and
-enter a base URL ending in `/`. Icons are resolved as:
+Icons are loaded at runtime and cached by the service worker, so every icon
+seen once stays available offline. **Tools → Config** offers three sources:
 
-```text
-<base_url><role_id>.png
-```
+- **Official** (default) — the art The Pandemonium Institute hosts for
+  community tools at [release.botc.app/resources](https://release.botc.app/resources/),
+  resolved as `<edition>/<role_id>_g.webp` / `_e.webp` (good / evil variant,
+  following the player's current alignment) or `<edition>/<role_id>.webp` for
+  unaligned characters.
+- **Alternate art** — the playtest art collection from
+  [tomozbot/botc-icons](https://github.com/tomozbot/botc-icons).
+- **Custom URL** — your own folder, resolved as `<base_url><role_id>.png`,
+  e.g. `http://localhost:8080/icons/` → `http://localhost:8080/icons/imp.png`.
 
-e.g. `http://localhost:8080/icons/` → `http://localhost:8080/icons/imp.png`.
-
-If an icon fails to load, a team-coloured fallback badge with the character's
-initials is shown instead.
+If an icon fails to load, the other sources are tried, then a team-coloured
+badge with the character's initials is shown instead.
 
 ## Game state & log export
 
@@ -173,8 +176,12 @@ The **Log** tab lets you export the event log as a plain-text file.
 ## Data & licensing
 
 `roles.json` is vendored from [bra1n/townsquare](https://github.com/bra1n/townsquare)
-(MIT licence; night-reminder text by Ben Finney).
+(MIT licence; night-reminder text by Ben Finney); role editions are synced with
+the official [roles.json](https://release.botc.app/resources/data/roles.json).
+The official French translation (`fr-off`) comes from the
+[French wiki](https://bambipotato.github.io/botc-fr-bambi/).
 
 *Blood on the Clocktower*, its characters, and artwork are © Steven Medway /
 The Pandemonium Institute. This is an unofficial personal tool; no artwork is
-bundled.
+bundled — icons are loaded from the sources above under the
+[Community Created Content Policy](https://bloodontheclocktower.com/pages/community-created-content-policy).

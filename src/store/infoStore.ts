@@ -7,7 +7,6 @@ interface InfoState {
   templateId: string | null
 
   isPresenting: boolean
-  presentationPhase: 'covering' | 'revealed'
 
   openComposer: (opts?: { draft?: DraftAtom[]; templateId?: string }) => void
   closeComposer: () => void
@@ -18,7 +17,8 @@ interface InfoState {
   moveAtom: (from: number, to: number) => void
 
   startPresentation: () => void
-  revealPresentation: () => void
+  /** Skip the composer: show these atoms right away */
+  presentDraft: (draft: DraftAtom[]) => void
   endPresentation: () => void
 }
 
@@ -27,7 +27,6 @@ export const useInfoStore = create<InfoState>()((set) => ({
   draft: [],
   templateId: null,
   isPresenting: false,
-  presentationPhase: 'covering',
 
   openComposer: (opts) =>
     set({
@@ -61,11 +60,10 @@ export const useInfoStore = create<InfoState>()((set) => ({
       return { draft: next }
     }),
 
-  startPresentation: () =>
-    set({ isPresenting: true, presentationPhase: 'covering' }),
+  startPresentation: () => set({ isPresenting: true }),
 
-  revealPresentation: () => set({ presentationPhase: 'revealed' }),
+  presentDraft: (draft) => set({ draft, templateId: null, isPresenting: true }),
 
   endPresentation: () =>
-    set({ isPresenting: false, presentationPhase: 'covering' }),
+    set({ isPresenting: false }),
 }))

@@ -1160,7 +1160,7 @@
   {
     "id": "noble",
     "name": "Noble",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 44,
     "firstNightReminder": "Point to 3 players including one evil player, in no particular order.",
@@ -1173,7 +1173,7 @@
   {
     "id": "bountyhunter",
     "name": "Bounty Hunter",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 46,
     "firstNightReminder": "Point to 1 evil player. Wake the townsfolk who is evil and show them the 'You are' card and the thumbs down evil sign.",
@@ -1186,7 +1186,7 @@
   {
     "id": "pixie",
     "name": "Pixie",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 29,
     "firstNightReminder": "Show the Pixie 1 in-play Townsfolk character token.",
@@ -1200,7 +1200,7 @@
   {
     "id": "general",
     "name": "General",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 50,
     "firstNightReminder": "Show the General thumbs up for good winning, thumbs down for evil winning or thumb to the side for neither.",
@@ -1213,7 +1213,7 @@
   {
     "id": "preacher",
     "name": "Preacher",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 14,
     "firstNightReminder": "The Preacher chooses a player. If a Minion is chosen, wake the Minion and show the 'This character selected you' card and then the Preacher token.",
@@ -1226,7 +1226,7 @@
   {
     "id": "king",
     "name": "King",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 10,
     "firstNightReminder": "Wake the Demon, show them the 'This character selected you' card, show the King token and point to the King player.",
@@ -1239,7 +1239,7 @@
   {
     "id": "balloonist",
     "name": "Balloonist",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 45,
     "firstNightReminder": "Choose a character type. Point to a player whose character is of that type. Place the Balloonist's Seen reminder next to that character.",
@@ -1256,7 +1256,7 @@
   {
     "id": "cultleader",
     "name": "Cult Leader",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 48,
     "firstNightReminder": "If the cult leader changed alignment, show them the thumbs up good signal of the thumbs down evil signal accordingly.",
@@ -1269,7 +1269,7 @@
   {
     "id": "lycanthrope",
     "name": "Lycanthrope",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1282,7 +1282,7 @@
   {
     "id": "amnesiac",
     "name": "Amnesiac",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 32,
     "firstNightReminder": "Decide the Amnesiac's entire ability. If the Amnesiac's ability causes them to wake tonight: Wake the Amnesiac and run their ability.",
@@ -1295,7 +1295,7 @@
   {
     "id": "nightwatchman",
     "name": "Nightwatchman",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 47,
     "firstNightReminder": "The Nightwatchman may point to a player. Wake that player, show the 'This character selected you' card and the Nightwatchman token, then point to the Nightwatchman player.",
@@ -1308,7 +1308,7 @@
   {
     "id": "engineer",
     "name": "Engineer",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 13,
     "firstNightReminder": "The Engineer shows a 'no' head signal, or points to a Demon or points to the relevant number of Minions. If the Engineer chose characters, replace the Demon or Minions with the choices, then wake the relevant players and show them the You are card and the relevant character tokens.",
@@ -1321,7 +1321,7 @@
   {
     "id": "fisherman",
     "name": "Fisherman",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1334,7 +1334,7 @@
   {
     "id": "huntsman",
     "name": "Huntsman",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 30,
     "firstNightReminder": "The Huntsman shakes their head 'no' or points to a player. If they point to the Damsel, wake that player, show the 'You are' card and a not-in-play character token.",
@@ -1347,7 +1347,7 @@
   {
     "id": "alchemist",
     "name": "Alchemist",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 3,
     "firstNightReminder": "Show the Alchemist a not-in-play Minion token",
@@ -1361,7 +1361,7 @@
   {
     "id": "farmer",
     "name": "Farmer",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1374,7 +1374,7 @@
   {
     "id": "magician",
     "name": "Magician",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 5,
     "firstNightReminder": "",
@@ -1387,7 +1387,7 @@
   {
     "id": "choirboy",
     "name": "Choirboy",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1400,7 +1400,7 @@
   {
     "id": "poppygrower",
     "name": "Poppy Grower",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 4,
     "firstNightReminder": "Do not inform the Demon/Minions who each other are",
@@ -1413,7 +1413,7 @@
   {
     "id": "atheist",
     "name": "Atheist",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1426,7 +1426,7 @@
   {
     "id": "cannibal",
     "name": "Cannibal",
-    "edition": "",
+    "edition": "carousel",
     "team": "townsfolk",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1440,7 +1440,7 @@
   {
     "id": "snitch",
     "name": "Snitch",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 7,
     "firstNightReminder": "After Minion info wake each Minion and show them three not-in-play character tokens. These may be the same or different to each other and the ones shown to the Demon.",
@@ -1453,7 +1453,7 @@
   {
     "id": "acrobat",
     "name": "Acrobat",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1466,7 +1466,7 @@
   {
     "id": "puzzlemaster",
     "name": "Puzzlemaster",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1480,7 +1480,7 @@
   {
     "id": "heretic",
     "name": "Heretic",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1493,7 +1493,7 @@
   {
     "id": "damsel",
     "name": "Damsel",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 31,
     "firstNightReminder": "Wake all the Minions, show them the 'This character selected you' card and the Damsel token.",
@@ -1506,7 +1506,7 @@
   {
     "id": "golem",
     "name": "Golem",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1519,7 +1519,7 @@
   {
     "id": "politician",
     "name": "Politician",
-    "edition": "",
+    "edition": "carousel",
     "team": "outsider",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1532,7 +1532,7 @@
   {
     "id": "widow",
     "name": "Widow",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 18,
     "firstNightReminder": "Show the Grimoire to the Widow for as long as they need. The Widow points to a player. That player is poisoned. Wake a good player. Show the 'These characters are in play' card, then the Widow character token.",
@@ -1546,7 +1546,7 @@
   {
     "id": "fearmonger",
     "name": "Fearmonger",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 26,
     "firstNightReminder": "The Fearmonger points to a player. Place the Fear token next to that player and announce that a new player has been selected with the Fearmonger ability.",
@@ -1559,7 +1559,7 @@
   {
     "id": "psychopath",
     "name": "Psychopath",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1572,7 +1572,7 @@
   {
     "id": "goblin",
     "name": "Goblin",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1599,7 +1599,7 @@
   {
     "id": "mezepheles",
     "name": "Mezepheles",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 27,
     "firstNightReminder": "Show the Mezepheles their secret word.",
@@ -1613,7 +1613,7 @@
   {
     "id": "marionette",
     "name": "Marionette",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 12,
     "firstNightReminder": "Select one of the good players next to the Demon and place the Is the Marionette reminder token. Wake the Demon and show them the Marionette.",
@@ -1627,7 +1627,7 @@
   {
     "id": "boomdandy",
     "name": "Boomdandy",
-    "edition": "",
+    "edition": "carousel",
     "team": "minion",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1640,7 +1640,7 @@
   {
     "id": "lilmonsta",
     "name": "Lil' Monsta",
-    "edition": "",
+    "edition": "carousel",
     "team": "demon",
     "firstNight": 15,
     "firstNightReminder": "Wake all Minions together, allow them to vote by pointing at who they want to babysit Lil' Monsta.",
@@ -1655,7 +1655,7 @@
   {
     "id": "lleech",
     "name": "Lleech",
-    "edition": "",
+    "edition": "carousel",
     "team": "demon",
     "firstNight": 16,
     "firstNightReminder": "The Lleech points to a player. Place the Poisoned reminder token.",
@@ -1669,7 +1669,7 @@
   {
     "id": "alhadikhia",
     "name": "Al-Hadikhia",
-    "edition": "",
+    "edition": "carousel",
     "team": "demon",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1684,7 +1684,7 @@
   {
     "id": "legion",
     "name": "Legion",
-    "edition": "",
+    "edition": "carousel",
     "team": "demon",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1698,7 +1698,7 @@
   {
     "id": "leviathan",
     "name": "Leviathan",
-    "edition": "",
+    "edition": "carousel",
     "team": "demon",
     "firstNight": 54,
     "firstNightReminder": "Place the Leviathan 'Day 1' marker. Announce 'The Leviathan is in play; this is Day 1.'",
@@ -1716,7 +1716,7 @@
   {
     "id": "riot",
     "name": "Riot",
-    "edition": "",
+    "edition": "carousel",
     "team": "demon",
     "firstNight": 0,
     "firstNightReminder": "",
@@ -1729,7 +1729,7 @@
   {
     "id": "gangster",
     "name": "Gangster",
-    "edition": "",
+    "edition": "carousel",
     "team": "traveler",
     "firstNight": 0,
     "firstNightReminder": "",

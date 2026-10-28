@@ -1,18 +1,19 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useMemo, useEffect } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { useInfoStore } from '@/store/infoStore'
 import { useUiStore } from '@/store/uiStore'
+import { useNightStore } from '@/store/nightStore'
 import { buildNightOrder } from '@/lib/nightOrder'
 import { resolveRoleText } from '@/lib/roleResolution'
 import { getTemplateForCharacter, getTemplateById, expandTemplateForGame } from '@/lib/infoResolution'
-import { useRolePool, useDemonPlayerId } from '@/hooks/useRolePool'
+import { useRolePool, useDemonPlayerId, useMinionPlayerIds } from '@/hooks/useRolePool'
 import type { NightStep } from '@/types'
 
 /** Info templates backing the non-character night steps */
-const SPECIAL_TEMPLATES: Record<string, string> = {
-  minioninfo: 'minion_info',
-  demoninfo: 'demon_info',
+const SPECIAL_TEMPLATES: Record<string, string[]> = {
+  minioninfo: ['minion_info'],
+  demoninfo: ['demon_minions', 'demon_info'],
 }
 
 export function NightRunner() {
@@ -22,21 +23,20 @@ export function NightRunner() {
   const goToPlayerInfo = useUiStore((s) => s.goToPlayerInfo)
   const rolePool = useRolePool()
   const demonPlayerId = useDemonPlayerId()
+  const minionPlayerIds = useMinionPlayerIds()
 
-  const [nightType, setNightType] = useState<'first' | 'other'>(day === 0 ? 'first' : 'other')
-  const [includeAll, setIncludeAll] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [checked, setChecked] = useState<Set<number>>(new Set())
+  const {
+    forDay, nightType, includeAll, currentStep, checked,
+    setNightType, setIncludeAll, setCurrentStep, setChecked, resetForDay,
+  } = useNightStore()
 
+  // Progress survives leaving the view; only a new day starts a fresh night
   useEffect(() => {
-    setNightType(day === 0 ? 'first' : 'other')
-    setCurrentStep(0)
-    setChecked(new Set())
-  }, [day])
+    if (forDay !== day) resetForDay(day)
+  }, [day, forDay, resetForDay])
 
-  const steps: NightStep[] = useMemo(() => {
-    if (!script) return []
-    const resolvedPool = rolePool.map((r) => {
+  const resolvedPool = useMemo(
+    () => rolePool.map((r) => {
       const res = resolveRoleText(r, editOverrides, locales, activeLocale)
       return {
         ...r,
@@ -44,9 +44,14 @@ export function NightRunner() {
         firstNightReminder: res.displayFirstNightReminder,
         otherNightReminder: res.displayOtherNightReminder,
       }
-    })
-    return buildNightOrder(nightType, script, players, resolvedPool, includeAll)
-  }, [nightType, script, players, rolePool, includeAll, editOverrides, locales, activeLocale])
+    }),
+    [rolePool, editOverrides, locales, activeLocale],
+  )
+
+  const steps: NightStep[] = useMemo(
+    () => (script ? buildNightOrder(nightType, script, players, resolvedPool, includeAll) : []),
+    [nightType, script, players, resolvedPool, includeAll],
+  )
 
   const total = steps.length
   const step = steps[currentStep]
@@ -59,6 +64,22 @@ export function NightRunner() {
     })
 
   const reset = () => { setCurrentStep(0); setChecked(new Set()) }
+
+  /** Toggle the full script without losing progress: steps are carried over by id */
+  const toggleFullScript = (on: boolean) => {
+    if (!script) return
+    const next = buildNightOrder(nightType, script, players, resolvedPool, on)
+    const indexOf = (id: string) => next.findIndex((s) => s.id === id)
+    // The current step, or if it is hidden now, the next one still listed
+    let current = next.length - 1
+    for (let i = currentStep; i < steps.length; i++) {
+      const j = indexOf(steps[i]!.id)
+      if (j >= 0) { current = j; break }
+    }
+    setIncludeAll(on)
+    setCurrentStep(current)
+    setChecked(new Set([...checked].map((i) => indexOf(steps[i]?.id ?? '')).filter((j) => j >= 0)))
+  }
 
   if (!script) {
     return (
@@ -100,7 +121,7 @@ export function NightRunner() {
             <input
               type="checkbox"
               checked={includeAll}
-              onChange={(e) => { setIncludeAll(e.target.checked); reset() }}
+              onChange={(e) => toggleFullScript(e.target.checked)}
               className="w-4 h-4"
             />
             Show full script
@@ -147,24 +168,30 @@ export function NightRunner() {
             )}
 
             {(() => {
-              const tpl =
+              const tpls = (
                 step.type === 'role'
-                  ? getTemplateForCharacter(step.id, customTemplates)
-                  : getTemplateById(SPECIAL_TEMPLATES[step.id] ?? '', customTemplates)
-              if (!tpl) return null
+                  ? [getTemplateForCharacter(step.id, customTemplates)]
+                  : (SPECIAL_TEMPLATES[step.id] ?? []).map((id) => getTemplateById(id, customTemplates))
+              ).filter((t) => t !== undefined)
+              if (tpls.length === 0) return null
               return (
-                <button
-                  onClick={() => {
-                    openComposer({
-                      draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId }),
-                      templateId: tpl.id,
-                    })
-                    goToPlayerInfo()
-                  }}
-                  className="px-3 py-2 rounded bg-indigo-800 hover:bg-indigo-700 border border-indigo-600 text-sm text-indigo-200"
-                >
-                  📋 Show info
-                </button>
+                <div className="flex flex-wrap gap-2">
+                  {tpls.map((tpl) => (
+                    <button
+                      key={tpl.id}
+                      onClick={() => {
+                        openComposer({
+                          draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId, minionPlayerIds }),
+                          templateId: tpl.id,
+                        })
+                        goToPlayerInfo()
+                      }}
+                      className="px-3 py-2 rounded bg-indigo-800 hover:bg-indigo-700 border border-indigo-600 text-sm text-indigo-200"
+                    >
+                      📋 {tpls.length > 1 ? tpl.label : 'Show info'}
+                    </button>
+                  ))}
+                </div>
               )
             })()}
 

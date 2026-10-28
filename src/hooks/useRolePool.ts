@@ -31,6 +31,20 @@ export function useRoleById(id: string | null | undefined): RoleBase | null {
   }, [id, customRoles])
 }
 
+/** Players currently holding a minion-team character (Marionette included), in seat order */
+export function useMinionPlayerIds(): string[] {
+  const players = useGameStore((s) => s.players)
+  const pool = useRolePool()
+
+  return useMemo(() => {
+    const minionIds = new Set(pool.filter((r) => r.team === 'minion').map((r) => r.id))
+    return [...players]
+      .sort((a, b) => a.seatIndex - b.seatIndex)
+      .filter((p) => p.roleId && minionIds.has(p.roleId))
+      .map((p) => p.id)
+  }, [players, pool])
+}
+
 /** The player currently holding a demon-team character, if any */
 export function useDemonPlayerId(): string | null {
   const players = useGameStore((s) => s.players)

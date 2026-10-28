@@ -96,7 +96,7 @@ export function PlayerCard({ player, dragHandleProps, isDragging, style }: Props
         >
           {resolved ? (
             <>
-              <CharacterIcon role={role!} size={36} className="shrink-0" />
+              <CharacterIcon role={role!} alignment={player.alignment} size={36} className="shrink-0" />
               <span className="text-xs font-medium leading-tight">{resolved.displayName}</span>
             </>
           ) : (

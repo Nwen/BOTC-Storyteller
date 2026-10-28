@@ -16,5 +16,21 @@
   "demon_voted":            "DID THE DEMON VOTE?",
   "dead_evil_count":        "DEAD EVIL PLAYERS:",
   "demon_minion_distance":  "STEPS BETWEEN DEMON AND NEAREST MINION:",
-  "your_number":            "YOUR NUMBER:"
+  "your_number":            "YOUR NUMBER:",
+  "damsel_in_play":         "A DAMSEL IS IN PLAY",
+  "one_of_these_is_evil":   "ONE OF THESE IS EVIL",
+  "this_player_is_evil":    "THIS PLAYER IS EVIL",
+  "this_player_is":         "THIS PLAYER IS",
+  "these_characters_in_play": "THESE CHARACTERS ARE IN PLAY",
+  "this_character_is_alive": "THIS CHARACTER IS ALIVE",
+  "demon_is_one_of_these":  "THE DEMON IS ONE OF THESE",
+  "who_is_winning":         "WHO IS WINNING:",
+  "correct_guesses":        "CORRECT GUESSES:",
+  "this_character_selected_you": "THIS CHARACTER SELECTED YOU",
+  "your_ability_is":        "YOU HAVE THE ABILITY OF",
+  "secret_word":            "YOUR SECRET WORD:",
+  "widow_in_play":          "A WIDOW IS IN PLAY",
+  "accuracy":               "HOW ACCURATE YOU ARE:",
+  "these_are_your_minions": "THESE PLAYERS ARE YOUR MINIONS",
+  "this_player_is_one_of":  "THIS PLAYER IS ONE OF THESE"
 }

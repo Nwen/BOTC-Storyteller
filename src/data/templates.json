@@ -2,7 +2,7 @@
   {
     "id": "washerwoman_info",
     "characterId": "washerwoman",
-    "label": "Washerwoman info",
+    "label": "Washerwoman",
     "atoms": [
       { "kind": "statement", "key": "one_of_these_is_the" },
       { "kind": "player", "slots": 2 },
@@ -12,7 +12,7 @@
   {
     "id": "librarian_info",
     "characterId": "librarian",
-    "label": "Librarian info",
+    "label": "Librarian",
     "atoms": [
       { "kind": "statement", "key": "one_of_these_is_the" },
       { "kind": "player", "slots": 2 },
@@ -22,7 +22,7 @@
   {
     "id": "investigator_info",
     "characterId": "investigator",
-    "label": "Investigator info",
+    "label": "Investigator",
     "atoms": [
       { "kind": "statement", "key": "one_of_these_is_the" },
       { "kind": "player", "slots": 2 },
@@ -32,7 +32,7 @@
   {
     "id": "chef_info",
     "characterId": "chef",
-    "label": "Chef info",
+    "label": "Chef",
     "atoms": [
       { "kind": "statement", "key": "evil_pair_count" },
       { "kind": "number", "max": 6 }
@@ -41,7 +41,7 @@
   {
     "id": "empath_info",
     "characterId": "empath",
-    "label": "Empath info",
+    "label": "Empath",
     "atoms": [
       { "kind": "statement", "key": "evil_neighbours_count" },
       { "kind": "number", "max": 2 }
@@ -50,7 +50,7 @@
   {
     "id": "fortuneteller_info",
     "characterId": "fortuneteller",
-    "label": "Fortune Teller answer",
+    "label": "Fortune Teller",
     "atoms": [
       { "kind": "statement", "key": "your_answer" },
       { "kind": "yesno" }
@@ -59,7 +59,7 @@
   {
     "id": "undertaker_info",
     "characterId": "undertaker",
-    "label": "Undertaker info",
+    "label": "Undertaker",
     "atoms": [
       { "kind": "player", "slots": 1 },
       { "kind": "statement", "key": "this_player_was_the" },
@@ -69,7 +69,7 @@
   {
     "id": "ravenkeeper_info",
     "characterId": "ravenkeeper",
-    "label": "Ravenkeeper info",
+    "label": "Ravenkeeper",
     "atoms": [
       { "kind": "player", "slots": 1 },
       { "kind": "statement", "key": "this_player_is_the" },
@@ -79,7 +79,7 @@
   {
     "id": "spy_info",
     "characterId": "spy",
-    "label": "Spy info",
+    "label": "Spy",
     "atoms": [
       { "kind": "statement", "key": "you_are" },
       { "kind": "character" }
@@ -88,7 +88,7 @@
   {
     "id": "grandmother_info",
     "characterId": "grandmother",
-    "label": "Grandmother info",
+    "label": "Grandmother",
     "atoms": [
       { "kind": "statement", "key": "your_grandchild_is" },
       { "kind": "player", "slots": 1 },
@@ -98,7 +98,7 @@
   {
     "id": "seamstress_info",
     "characterId": "seamstress",
-    "label": "Seamstress info",
+    "label": "Seamstress",
     "atoms": [
       { "kind": "player", "slots": 2 },
       { "kind": "statement", "key": "your_answer" },
@@ -108,7 +108,7 @@
   {
     "id": "clockmaker_info",
     "characterId": "clockmaker",
-    "label": "Clockmaker info",
+    "label": "Clockmaker",
     "atoms": [
       { "kind": "statement", "key": "demon_minion_distance" },
       { "kind": "number", "max": 10 }
@@ -117,17 +117,18 @@
   {
     "id": "dreamer_info",
     "characterId": "dreamer",
-    "label": "Dreamer info",
+    "label": "Dreamer",
     "atoms": [
       { "kind": "player", "slots": 1 },
-      { "kind": "statement", "key": "this_player_is_the" },
+      { "kind": "statement", "key": "this_player_is_one_of" },
+      { "kind": "character" },
       { "kind": "character" }
     ]
   },
   {
     "id": "towncrier_info",
     "characterId": "towncrier",
-    "label": "Town Crier info",
+    "label": "Town Crier",
     "atoms": [
       { "kind": "statement", "key": "minion_nomination" },
       { "kind": "yesno" }
@@ -136,7 +137,7 @@
   {
     "id": "oracle_info",
     "characterId": "oracle",
-    "label": "Oracle info",
+    "label": "Oracle",
     "atoms": [
       { "kind": "statement", "key": "dead_evil_count" },
       { "kind": "number", "max": 15 }
@@ -145,7 +146,7 @@
   {
     "id": "savant_info",
     "characterId": "savant",
-    "label": "Savant info",
+    "label": "Savant",
     "atoms": [
       { "kind": "free_text" },
       { "kind": "free_text" }
@@ -154,7 +155,7 @@
   {
     "id": "flowergirl_info",
     "characterId": "flowergirl",
-    "label": "Flowergirl info",
+    "label": "Flowergirl",
     "atoms": [
       { "kind": "statement", "key": "demon_voted" },
       { "kind": "yesno" }
@@ -163,7 +164,7 @@
   {
     "id": "mathematician_info",
     "characterId": "mathematician",
-    "label": "Mathematician info",
+    "label": "Mathematician",
     "atoms": [
       { "kind": "statement", "key": "your_number" },
       { "kind": "number", "max": 15 }
@@ -172,15 +173,23 @@
   {
     "id": "chambermaid_info",
     "characterId": "chambermaid",
-    "label": "Chambermaid info",
+    "label": "Chambermaid",
     "atoms": [
       { "kind": "statement", "key": "wake_count" },
       { "kind": "number", "max": 15 }
     ]
   },
   {
+    "id": "demon_minions",
+    "label": "Demon minions (night 1)",
+    "atoms": [
+      { "kind": "statement", "key": "these_are_your_minions" },
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
     "id": "demon_info",
-    "label": "Demon info (night 1)",
+    "label": "Demon bluffs (night 1)",
     "atoms": [
       { "kind": "statement", "key": "demon_bluffs" },
       { "kind": "character" },
@@ -190,10 +199,316 @@
   },
   {
     "id": "minion_info",
-    "label": "Minion info (night 1)",
+    "label": "Minion (night 1)",
     "atoms": [
       { "kind": "statement", "key": "the_demon_is" },
       { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "damsel_info",
+    "characterId": "damsel",
+    "label": "Damsel → Minions",
+    "atoms": [
+      { "kind": "statement", "key": "damsel_in_play" },
+      { "kind": "character", "roleId": "damsel" }
+    ]
+  },
+  {
+    "id": "noble_info",
+    "characterId": "noble",
+    "label": "Noble",
+    "atoms": [
+      { "kind": "statement", "key": "one_of_these_is_evil" },
+      { "kind": "player", "slots": 3 }
+    ]
+  },
+  {
+    "id": "bountyhunter_info",
+    "characterId": "bountyhunter",
+    "label": "Bounty Hunter",
+    "atoms": [
+      { "kind": "statement", "key": "this_player_is_evil" },
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "pixie_info",
+    "characterId": "pixie",
+    "label": "Pixie",
+    "atoms": [
+      { "kind": "statement", "key": "these_characters_in_play" },
+      { "kind": "character", "filter": { "team": "townsfolk" } }
+    ]
+  },
+  {
+    "id": "general_info",
+    "characterId": "general",
+    "label": "General",
+    "atoms": [
+      { "kind": "statement", "key": "who_is_winning" },
+      { "kind": "team" }
+    ]
+  },
+  {
+    "id": "king_info",
+    "characterId": "king",
+    "label": "King",
+    "atoms": [
+      { "kind": "statement", "key": "this_character_is_alive" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "sage_info",
+    "characterId": "sage",
+    "label": "Sage",
+    "atoms": [
+      { "kind": "statement", "key": "demon_is_one_of_these" },
+      { "kind": "player", "slots": 2 }
+    ]
+  },
+  {
+    "id": "juggler_info",
+    "characterId": "juggler",
+    "label": "Juggler",
+    "atoms": [
+      { "kind": "statement", "key": "correct_guesses" },
+      { "kind": "number", "max": 5 }
+    ]
+  },
+  {
+    "id": "choirboy_info",
+    "characterId": "choirboy",
+    "label": "Choirboy",
+    "atoms": [
+      { "kind": "statement", "key": "the_demon_is" },
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "balloonist_info",
+    "characterId": "balloonist",
+    "label": "Balloonist",
+    "atoms": [
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "amnesiac_info",
+    "characterId": "amnesiac",
+    "label": "Amnesiac",
+    "atoms": [
+      { "kind": "statement", "key": "accuracy" },
+      { "kind": "free_text" }
+    ]
+  },
+  {
+    "id": "artist_info",
+    "characterId": "artist",
+    "label": "Artist",
+    "atoms": [
+      { "kind": "statement", "key": "your_answer" },
+      { "kind": "yesno" }
+    ]
+  },
+  {
+    "id": "nightwatchman_info",
+    "characterId": "nightwatchman",
+    "label": "Nightwatchman → chosen player",
+    "atoms": [
+      { "kind": "statement", "key": "this_character_selected_you" },
+      { "kind": "character", "roleId": "nightwatchman" },
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "exorcist_info",
+    "characterId": "exorcist",
+    "label": "Exorcist → Demon",
+    "atoms": [
+      { "kind": "statement", "key": "this_character_selected_you" },
+      { "kind": "character", "roleId": "exorcist" },
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "preacher_info",
+    "characterId": "preacher",
+    "label": "Preacher → Minion",
+    "atoms": [
+      { "kind": "statement", "key": "this_character_selected_you" },
+      { "kind": "character", "roleId": "preacher" }
+    ]
+  },
+  {
+    "id": "huntsman_info",
+    "characterId": "huntsman",
+    "label": "Huntsman → Damsel",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "character", "filter": { "team": "townsfolk" } }
+    ]
+  },
+  {
+    "id": "farmer_info",
+    "characterId": "farmer",
+    "label": "Farmer → new Farmer",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "character", "roleId": "farmer" }
+    ]
+  },
+  {
+    "id": "puzzlemaster_info",
+    "characterId": "puzzlemaster",
+    "label": "Puzzlemaster",
+    "atoms": [
+      { "kind": "statement", "key": "the_demon_is" },
+      { "kind": "player", "slots": 1 }
+    ]
+  },
+  {
+    "id": "alchemist_info",
+    "characterId": "alchemist",
+    "label": "Alchemist",
+    "atoms": [
+      { "kind": "statement", "key": "your_ability_is" },
+      { "kind": "character", "filter": { "team": "minion" } }
+    ]
+  },
+  {
+    "id": "godfather_info",
+    "characterId": "godfather",
+    "label": "Godfather",
+    "atoms": [
+      { "kind": "statement", "key": "these_characters_in_play" },
+      { "kind": "character", "filter": { "team": "outsider" } },
+      { "kind": "character", "filter": { "team": "outsider" } }
+    ]
+  },
+  {
+    "id": "eviltwin_info",
+    "characterId": "eviltwin",
+    "label": "Evil Twin",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_is_the" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "snitch_info",
+    "characterId": "snitch",
+    "label": "Snitch → Minions",
+    "atoms": [
+      { "kind": "statement", "key": "demon_bluffs" },
+      { "kind": "character" },
+      { "kind": "character" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "widow_info",
+    "characterId": "widow",
+    "label": "Widow → good player",
+    "atoms": [
+      { "kind": "statement", "key": "widow_in_play" },
+      { "kind": "character", "roleId": "widow" }
+    ]
+  },
+  {
+    "id": "mezepheles_info",
+    "characterId": "mezepheles",
+    "label": "Mezepheles",
+    "atoms": [
+      { "kind": "statement", "key": "secret_word" },
+      { "kind": "free_text" }
+    ]
+  },
+  {
+    "id": "mephit_info",
+    "characterId": "mephit",
+    "label": "Mephit",
+    "atoms": [
+      { "kind": "statement", "key": "secret_word" },
+      { "kind": "free_text" }
+    ]
+  },
+  {
+    "id": "cerenovus_info",
+    "characterId": "cerenovus",
+    "label": "Cerenovus → mad player",
+    "atoms": [
+      { "kind": "statement", "key": "this_character_selected_you" },
+      { "kind": "character", "roleId": "cerenovus" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "pithag_info",
+    "characterId": "pithag",
+    "label": "Pit-Hag → changed player",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "snakecharmer_info",
+    "characterId": "snakecharmer",
+    "label": "Snake Charmer → Demon swap",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "character" },
+      { "kind": "team" }
+    ]
+  },
+  {
+    "id": "fanggu_info",
+    "characterId": "fanggu",
+    "label": "Fang Gu → jumped Outsider",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "character", "roleId": "fanggu" },
+      { "kind": "team" }
+    ]
+  },
+  {
+    "id": "apprentice_info",
+    "characterId": "apprentice",
+    "label": "Apprentice",
+    "atoms": [
+      { "kind": "statement", "key": "your_ability_is" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "harlot_info",
+    "characterId": "harlot",
+    "label": "Harlot",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_is_the" },
+      { "kind": "character" }
+    ]
+  },
+  {
+    "id": "beggar_info",
+    "characterId": "beggar",
+    "label": "Beggar",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_is" },
+      { "kind": "team" }
+    ]
+  },
+  {
+    "id": "alignment_change",
+    "label": "Alignment change",
+    "atoms": [
+      { "kind": "statement", "key": "you_are" },
+      { "kind": "team" }
     ]
   }
 ]

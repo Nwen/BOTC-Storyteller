@@ -62,4 +62,11 @@ describe('buildNightOrder', () => {
     const ids = steps.filter((s) => s.type === 'role').map((s) => s.id)
     expect(ids).not.toContain('washerwoman')
   })
+
+  it('uses the translated role text from the pool, not the raw script roles', () => {
+    const translated = { ...WASHERWOMAN, name: 'Lavandière', firstNightReminder: 'Montrer un villageois.' }
+    const step = buildNightOrder('first', SCRIPT, PLAYERS, [IMP, translated]).find((s) => s.id === 'washerwoman')
+    expect(step?.label).toBe('Lavandière')
+    expect(step?.reminder).toBe('Montrer un villageois.')
+  })
 })

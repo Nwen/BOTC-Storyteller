@@ -9,7 +9,7 @@ import { ROLE_MAP } from '@/lib/scriptImport'
 import { CharacterIcon } from '@/components/ui/CharacterIcon'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { InfoComposer } from '@/components/PlayerInfo/InfoComposer'
-import type { RoleBase } from '@/types'
+import type { IconSource, RoleBase } from '@/types'
 
 type Tab = ToolsTab
 
@@ -200,8 +200,14 @@ function SetupTab() {
   )
 }
 
+const ICON_SOURCES: { value: IconSource; label: string; hint: string }[] = [
+  { value: 'official', label: 'Official', hint: 'Current art hosted by The Pandemonium Institute (release.botc.app).' },
+  { value: 'alternate', label: 'Alternate art', hint: 'Playtest art collection from github.com/tomozbot/botc-icons.' },
+  { value: 'custom', label: 'Custom URL', hint: 'Your own folder of <role_id>.png files.' },
+]
+
 function ConfigTab() {
-  const { iconBaseUrl, setIconBaseUrl, exportGameState, importGameState, newGame, newGameKeepPlayersAndScript } =
+  const { iconSource, setIconSource, iconBaseUrl, setIconBaseUrl, exportGameState, importGameState, newGame, newGameKeepPlayersAndScript } =
     useGameStore()
   const [urlDraft, setUrlDraft] = useState(iconBaseUrl)
   const [confirmNew, setConfirmNew] = useState<'full' | 'keep' | null>(null)
@@ -220,7 +226,27 @@ function ConfigTab() {
   return (
     <div className="scrollable h-full p-4 space-y-6">
       <div>
-        <label className="text-sm font-medium mb-2 block">Character icon base URL</label>
+        <label className="text-sm font-medium mb-2 block">Character icons</label>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {ICON_SOURCES.map(({ value, label }) => (
+            <button
+              key={value}
+              onClick={() => setIconSource(value)}
+              className={`px-3 py-2 rounded text-sm ${iconSource === value ? 'bg-blue-700' : 'bg-gray-800 hover:bg-gray-700'}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-gray-500 mb-3">
+          {ICON_SOURCES.find((s) => s.value === iconSource)?.hint} If an icon is missing, the other sources are
+          tried, then the character's initials.
+        </p>
+      </div>
+
+      {iconSource === 'custom' && (
+      <div>
+        <label className="text-sm font-medium mb-2 block">Custom icon base URL</label>
         <div className="flex gap-2">
           <input
             type="text"
@@ -240,6 +266,7 @@ function ConfigTab() {
           Icons are loaded as: base_url + role_id + ".png"
         </p>
       </div>
+      )}
 
       <div className="space-y-2">
         <p className="text-sm font-medium">Game state</p>

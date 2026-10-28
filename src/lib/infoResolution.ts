@@ -1,6 +1,6 @@
 import ENGLISH_STATEMENTS from '@/data/statements.json'
 import BUNDLED_TEMPLATES from '@/data/templates.json'
-import type { DraftAtom, InfoTemplate, LocaleData, TemplateAtom } from '@/types'
+import type { DraftAtom, InfoTemplate, LocaleData, RoleBase, TemplateAtom } from '@/types'
 
 const STATEMENTS = ENGLISH_STATEMENTS as Record<string, string>
 const TEMPLATES = BUNDLED_TEMPLATES as InfoTemplate[]
@@ -64,11 +64,14 @@ export interface GameContext {
   bluffs?: string[]
   /** The player holding the demon, if a demon is assigned */
   demonPlayerId?: string | null
+  /** The players holding minions, in seat order */
+  minionPlayerIds?: string[]
 }
 
 /**
  * Expand a template and pre-fill the slots the grimoire can already answer:
- * the demon's bluffs, and — for minion info — who the demon is.
+ * the demon's bluffs, who the demon is (minion info) and who the minions are
+ * (one player slot per minion).
  */
 export function expandTemplateForGame(
   template: InfoTemplate,
@@ -76,6 +79,11 @@ export function expandTemplateForGame(
 ): DraftAtom[] {
   const atoms = expandTemplate(template)
   const bluffs = ctx.bluffs ?? []
+
+  if (template.id === 'demon_minions' && ctx.minionPlayerIds?.length) {
+    const minions = ctx.minionPlayerIds.map((playerId): DraftAtom => ({ kind: 'player', playerId }))
+    return [...atoms.filter((atom) => atom.kind !== 'player'), ...minions]
+  }
 
   if (template.id === 'demon_info' || template.id === 'minion_info') {
     let bluffIdx = 0
@@ -111,7 +119,7 @@ function expandAtom(atom: TemplateAtom, out: DraftAtom[]): void {
       }
       break
     case 'character':
-      out.push({ kind: 'character', roleId: null, ...(atom.filter ? { filter: atom.filter } : {}) })
+      out.push({ kind: 'character', roleId: atom.roleId ?? null, ...(atom.filter ? { filter: atom.filter } : {}) })
       break
     case 'team':
       out.push({ kind: 'team', value: null })
@@ -162,4 +170,51 @@ function atomToLog(
     case 'free_text':
       return atom.text || '[free text]'
   }
+}
+
+/** Statements that tie the player before them to the character after them */
+const PLAYER_CHARACTER_LINKS = new Set(['this_player_is_the', 'this_player_was_the'])
+
+/**
+ * Index of the character atom that names the character of the player atom at
+ * `playerIndex` — e.g. Ravenkeeper "<player> THIS PLAYER IS THE <character>" or
+ * Grandmother "<player> <character>" — or null when there is none. A player
+ * preceded by another player ("one of these two…") is never linked.
+ */
+export function linkedCharacterIndex(atoms: DraftAtom[], playerIndex: number): number | null {
+  if (atoms[playerIndex]?.kind !== 'player') return null
+  if (atoms[playerIndex - 1]?.kind === 'player') return null
+  let i = playerIndex + 1
+  const between = atoms[i]
+  if (between?.kind === 'statement' && PLAYER_CHARACTER_LINKS.has(between.key)) i++
+  return atoms[i]?.kind === 'character' ? i : null
+}
+
+const EVIL_TEAMS = new Set(['minion', 'demon'])
+
+/**
+ * Dreamer-style "<player> THIS PLAYER IS ONE OF THESE <character> <character>":
+ * the player's real character goes in the slot of its alignment (good first,
+ * evil second, so the order gives nothing away) and the other slot is set up
+ * for a character of the opposite alignment. Returns the two updated atoms, or
+ * null when the pattern doesn't apply.
+ */
+export function fillOneOfPair(
+  atoms: DraftAtom[],
+  playerIndex: number,
+  role: Pick<RoleBase, 'id' | 'team'>,
+): Array<{ index: number; atom: DraftAtom }> | null {
+  const stmt = atoms[playerIndex + 1]
+  const a = atoms[playerIndex + 2]
+  const b = atoms[playerIndex + 3]
+  if (atoms[playerIndex]?.kind !== 'player') return null
+  if (stmt?.kind !== 'statement' || stmt.key !== 'this_player_is_one_of') return null
+  if (a?.kind !== 'character' || b?.kind !== 'character') return null
+  const evil = EVIL_TEAMS.has(role.team)
+  const real: DraftAtom = { kind: 'character', roleId: role.id }
+  const decoy: DraftAtom = { kind: 'character', roleId: null, filter: { alignment: evil ? 'good' : 'evil' } }
+  return [
+    { index: playerIndex + 2, atom: evil ? decoy : real },
+    { index: playerIndex + 3, atom: evil ? real : decoy },
+  ]
 }
