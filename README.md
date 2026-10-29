@@ -81,17 +81,21 @@ replaces that entry instead of duplicating it; a script with no `_meta` name is
 saved under its filename. The **×** on a saved script removes it (with a
 confirmation) — it does not unload the script currently in play.
 
-### Bundled scripts
+### Scripts folder
 
-Drop a script JSON file into `public/scripts/` and register it in
-`public/scripts/index.json`:
+Drop script `.json` files into the `scripts/` folder at the root of the project,
+on the machine running the app. `docker-compose.yml` mounts it read-only into the
+container, and `npm run dev` serves it too. Every script in it appears as a
+one-click button in the Script Manager (**Bundled** row) on every device, the
+next time the app is loaded — no rebuild or restart needed. A script without a
+`_meta` name is shown under its filename; files that aren't valid scripts are
+skipped.
 
-```json
-["my_script.json"]
-```
+With a plain `docker run`, mount the folder yourself:
+`-v "$PWD/scripts:/data/scripts:ro"`.
 
-The app fetches and loads all listed scripts on startup; they appear as
-one-click buttons in the Script Manager.
+Scripts can also be baked into the build: put them in `public/scripts/` and list
+them in `public/scripts/index.json` (`["my_script.json"]`).
 
 Script JSON must follow the [BotC Script Tool schema][schema]:
 

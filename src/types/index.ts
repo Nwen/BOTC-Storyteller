@@ -217,8 +217,6 @@ export interface SavedScript {
   name: string
   savedAt: number
   script: LoadedScript
-  /** Local-only: true once the server has this version (see lib/scriptSync) */
-  synced?: boolean
 }
 
 export interface LibraryState {

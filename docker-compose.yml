@@ -5,7 +5,5 @@ services:
       - "32768:80"
     restart: unless-stopped
     volumes:
-      - scripts-data:/data/scripts
-
-volumes:
-  scripts-data:
+      # Drop script .json files into ./scripts — they show up in the app on next load
+      - ./scripts:/data/scripts:ro

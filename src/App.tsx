@@ -39,7 +39,6 @@ export default function App() {
   useEffect(() => {
     void loadBundledLocales()
     void loadBundledScripts()
-    void useLibraryStore.getState().syncSavedScripts()
   }, [])
 
   const localeName = activeLocale === 'en' ? 'EN' : (locales[activeLocale]?.name ?? activeLocale)

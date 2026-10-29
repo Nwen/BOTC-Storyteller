@@ -10,7 +10,7 @@ RUN npm run build
 FROM nginx:stable-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-# Writable store for saved scripts, mounted as a volume in docker-compose.yml
-RUN mkdir -p /data/scripts && chown nginx:nginx /data/scripts
+# Host scripts folder, mounted by docker-compose.yml (empty without it)
+RUN mkdir -p /data/scripts
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
