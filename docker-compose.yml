@@ -5,5 +5,7 @@ services:
       - "32768:80"
     restart: unless-stopped
     volumes:
-      # Drop script .json files into ./scripts — they show up in the app on next load
-      - ./scripts:/data/scripts:ro
+      # Script .json files dropped in this host folder show up in the app on next load.
+      # Set SCRIPTS_DIR (in .env, the shell, or Portainer's stack environment variables)
+      # to an absolute host path; defaults to ./scripts next to this file.
+      - ${SCRIPTS_DIR:-./scripts}:/data/scripts:ro

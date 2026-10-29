@@ -83,16 +83,26 @@ confirmation) — it does not unload the script currently in play.
 
 ### Scripts folder
 
-Drop script `.json` files into the `scripts/` folder at the root of the project,
-on the machine running the app. `docker-compose.yml` mounts it read-only into the
-container, and `npm run dev` serves it too. Every script in it appears as a
+Drop script `.json` files into the scripts folder on the machine running the app.
+`docker-compose.yml` mounts it read-only into the container (and `npm run dev`
+serves the project's `scripts/` folder too). Every script in it appears as a
 one-click button in the Script Manager (**Bundled** row) on every device, the
 next time the app is loaded — no rebuild or restart needed. A script without a
 `_meta` name is shown under its filename; files that aren't valid scripts are
 skipped.
 
-With a plain `docker run`, mount the folder yourself:
-`-v "$PWD/scripts:/data/scripts:ro"`.
+The host folder is set by the `SCRIPTS_DIR` environment variable, defaulting to
+`./scripts` next to `docker-compose.yml`:
+
+- **docker compose**: put `SCRIPTS_DIR=/srv/botc/scripts` in a `.env` file next to
+  `docker-compose.yml`, or export it before `docker compose up -d`.
+- **Portainer** (stack): add `SCRIPTS_DIR` under *Environment variables* in the
+  stack editor. Use an absolute path — a relative one is resolved inside
+  Portainer's own data folder, not your project.
+
+The folder must exist on the host; Docker creates an empty one (owned by root)
+if it doesn't. With a plain `docker run`, mount it yourself:
+`-v /srv/botc/scripts:/data/scripts:ro`.
 
 Scripts can also be baked into the build: put them in `public/scripts/` and list
 them in `public/scripts/index.json` (`["my_script.json"]`).

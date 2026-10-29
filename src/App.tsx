@@ -94,15 +94,22 @@ export default function App() {
   )
 }
 
-// Safari on iPad only has the prefixed Fullscreen API
+// Safari on iPad only has the prefixed Fullscreen API — and may still refuse the whole page
 type WebkitDocument = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => void }
 type WebkitElement = HTMLElement & { webkitRequestFullscreen?: () => void }
 
 const fullscreenElement = () =>
   document.fullscreenElement ?? (document as WebkitDocument).webkitFullscreenElement ?? null
 
+/** Launched from the home screen: no browser bar to hide */
+const isStandalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  (navigator as Navigator & { standalone?: boolean }).standalone === true
+
 function FullscreenButton() {
   const [isFullscreen, setIsFullscreen] = useState(() => fullscreenElement() !== null)
+  // Where to anchor the "add to home screen" tip, when fullscreen isn't available
+  const [tipAt, setTipAt] = useState<{ top: number; right: number } | null>(null)
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(fullscreenElement() !== null)
@@ -114,37 +121,74 @@ function FullscreenButton() {
     }
   }, [])
 
-  const root = document.documentElement as WebkitElement
-  // e.g. iPhone Safari: no Fullscreen API at all (add the app to the home screen instead)
-  if (!root.requestFullscreen && !root.webkitRequestFullscreen) return null
+  if (isStandalone()) return null
 
-  const toggle = () => {
+  const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     const doc = document as WebkitDocument
     if (fullscreenElement()) {
       if (document.exitFullscreen) void document.exitFullscreen()
       else doc.webkitExitFullscreen?.()
-    } else if (root.requestFullscreen) {
-      void root.requestFullscreen().catch(() => {})
-    } else {
-      root.webkitRequestFullscreen?.()
+      return
     }
+    const rect = e.currentTarget.getBoundingClientRect()
+    const showTip = () => setTipAt({ top: rect.bottom + 6, right: window.innerWidth - rect.right })
+    const root = document.documentElement as WebkitElement
+    try {
+      if (root.requestFullscreen) void root.requestFullscreen().catch(() => {})
+      else if (root.webkitRequestFullscreen) root.webkitRequestFullscreen()
+      else return showTip()   // e.g. iPad / iPhone Safari in mobile mode
+    } catch {
+      return showTip()
+    }
+    // Some browsers (iPad Safari) accept the call and silently do nothing
+    setTimeout(() => { if (!fullscreenElement()) showTip() }, 600)
   }
 
   return (
-    <button
-      onClick={toggle}
-      className="ml-auto shrink-0 px-4 py-3 text-gray-500 hover:text-gray-300 transition-colors"
-      title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-      aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {isFullscreen
-          // corners pointing in
-          ? <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
-          // corners pointing out
-          : <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />}
-      </svg>
-    </button>
+    <>
+      <button
+        onClick={toggle}
+        className="ml-auto shrink-0 px-4 py-3 text-gray-500 hover:text-gray-300 transition-colors"
+        title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+        aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          {isFullscreen
+            // corners pointing in
+            ? <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+            // corners pointing out
+            : <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />}
+        </svg>
+      </button>
+
+      {tipAt && (
+        // Fixed, outside the nav's horizontal scroll so it isn't clipped; any tap closes it
+        <div className="fixed inset-0 z-50" onClick={() => setTipAt(null)}>
+          <div
+            className="absolute w-72 rounded-lg border border-gray-700 bg-gray-900 p-3 text-sm text-gray-300 shadow-xl"
+            style={{ top: tipAt.top, right: tipAt.right }}
+          >
+            <p className="font-medium text-gray-100 mb-1">Fullscreen isn&rsquo;t available in this browser</p>
+            <p className="mb-1.5">
+              On iPad, try in <strong>Safari</strong>: other iOS browsers (Firefox, Chrome…) can&rsquo;t go fullscreen.
+            </p>
+            <p>
+              Or tap <span className="whitespace-nowrap">Share <ShareIcon /></span> then{' '}
+              <strong>Add to Home Screen</strong>, and open the app from its icon: it runs without the browser bar.
+            </p>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
+/** Safari's share glyph, so the tip matches what's on screen */
+function ShareIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline -mt-1">
+      <path d="M12 3v12M8 7l4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
+    </svg>
   )
 }
 
