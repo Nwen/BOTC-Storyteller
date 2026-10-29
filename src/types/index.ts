@@ -1,6 +1,6 @@
 // ─── Core character / role types ────────────────────────────────────────────
 
-export type Team = 'townsfolk' | 'outsider' | 'minion' | 'demon' | 'traveler' | 'fabled'
+export type Team = 'townsfolk' | 'outsider' | 'minion' | 'demon' | 'traveler' | 'fabled' | 'loric'
 
 export interface RoleBase {
   id: string
@@ -148,6 +148,8 @@ export interface GameState {
   log: LogEntry[]
   globalNotes: string
   bluffs: string[]    // role ids shown to demon as bluffs
+  /** Fabled & Loric in play — the Storyteller's, not assigned to any player */
+  storytellerRoles: string[]
   script: LoadedScript | null
   iconSource: IconSource
   /** Only used when iconSource is 'custom' */
@@ -215,6 +217,8 @@ export interface SavedScript {
   name: string
   savedAt: number
   script: LoadedScript
+  /** Local-only: true once the server has this version (see lib/scriptSync) */
+  synced?: boolean
 }
 
 export interface LibraryState {

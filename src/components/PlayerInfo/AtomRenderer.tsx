@@ -16,6 +16,7 @@ const TEAM_COLORS: Record<string, string> = {
   demon:     'text-red-300',
   traveler:  'text-purple-300',
   fabled:    'text-yellow-300',
+  loric:     'text-emerald-300',
 }
 
 /** 'grouped': full-screen, but sharing the screen with other characters (e.g. bluffs) */
@@ -79,9 +80,7 @@ function PlayerAtom({ atom, size }: Readonly<{ atom: Extract<DraftAtom, { kind: 
     <div className="text-center">
       <div className={`font-black text-white leading-tight ${sm ? 'text-base' : 'text-6xl md:text-7xl lg:text-8xl'}`}>
         {player.name}
-      </div>
-      <div className={`text-gray-400 font-medium mt-1 ${sm ? 'text-sm' : 'text-2xl md:text-3xl'}`}>
-        Seat {player.seatIndex + 1}
+        <sup className="text-gray-500 font-semibold ml-[0.15em] text-[0.4em]">{player.seatIndex + 1}</sup>
       </div>
     </div>
   )

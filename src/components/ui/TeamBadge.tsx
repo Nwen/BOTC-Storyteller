@@ -8,6 +8,7 @@ export const TEAM_LABELS: Record<Team, string> = {
   demon:     'Demon',
   traveler:  'Traveler',
   fabled:    'Fabled',
+  loric:     'Loric',
 }
 
 export const TEAM_COLORS: Record<Team, string> = {
@@ -17,6 +18,7 @@ export const TEAM_COLORS: Record<Team, string> = {
   demon:     'bg-red-900/60 text-red-300 border border-red-700',
   traveler:  'bg-purple-900/60 text-purple-300 border border-purple-700',
   fabled:    'bg-yellow-900/60 text-yellow-300 border border-yellow-700',
+  loric:     'bg-emerald-900/60 text-emerald-300 border border-emerald-700',
 }
 
 export function useTeamLabel(team: Team): string {

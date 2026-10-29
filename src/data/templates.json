@@ -398,6 +398,27 @@
     ]
   },
   {
+    "id": "marionette_info",
+    "characterId": "marionette",
+    "label": "Marionette → Demon",
+    "atoms": [
+      { "kind": "player", "slots": 1 },
+      { "kind": "statement", "key": "this_player_is_the" },
+      { "kind": "character", "roleId": "marionette" }
+    ]
+  },
+  {
+    "id": "lunatic_info",
+    "characterId": "lunatic",
+    "label": "Lunatic → fake bluffs",
+    "atoms": [
+      { "kind": "statement", "key": "demon_bluffs" },
+      { "kind": "character", "filter": { "alignment": "good" } },
+      { "kind": "character", "filter": { "alignment": "good" } },
+      { "kind": "character", "filter": { "alignment": "good" } }
+    ]
+  },
+  {
     "id": "snitch_info",
     "characterId": "snitch",
     "label": "Snitch → Minions",

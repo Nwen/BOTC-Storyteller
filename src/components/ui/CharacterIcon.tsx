@@ -10,6 +10,7 @@ const TEAM_BG: Record<Team, string> = {
   demon:     'bg-red-800',
   traveler:  'bg-purple-800',
   fabled:    'bg-yellow-800',
+  loric:     'bg-emerald-800',
 }
 
 interface Props {

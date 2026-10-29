@@ -89,7 +89,7 @@ function extractTemplateLabels(raw: unknown): LocaleData['templates'] | null {
 }
 
 // Teams plus the two alignments, shown by the info composer's team atom
-const TEAM_KEYS: Array<Team | 'good' | 'evil'> = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled', 'good', 'evil']
+const TEAM_KEYS: Array<Team | 'good' | 'evil'> = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled', 'loric', 'good', 'evil']
 
 function extractTeams(raw: unknown): LocaleData['teams'] | null {
   if (typeof raw !== 'object' || raw === null) return null

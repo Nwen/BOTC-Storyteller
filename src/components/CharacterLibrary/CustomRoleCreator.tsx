@@ -4,7 +4,7 @@ import { Modal } from '@/components/ui/Modal'
 import { BASE_ROLES } from '@/lib/scriptImport'
 import type { RoleBase, Team } from '@/types'
 
-const TEAMS: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled']
+const TEAMS: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled', 'loric']
 
 interface Props { open: boolean; onClose: () => void }
 

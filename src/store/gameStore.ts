@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import { nanoid } from '@/lib/nanoid'
 import { getTeamComposition } from '@/lib/teamComposition'
 import { hasFacade } from '@/lib/facadeRoles'
+import { scriptStorytellerRoleIds } from '@/lib/storytellerRoles'
 import { useNightStore } from './nightStore'
 import type {
   GameState, GamePhase, Player, Nomination, VoteChoice, LogEntry, LogEntryKind,
@@ -58,6 +59,10 @@ interface GameActions {
   addBluff: (roleId: string) => void
   removeBluff: (roleId: string) => void
 
+  // Fabled & Loric
+  addStorytellerRole: (roleId: string) => void
+  removeStorytellerRole: (roleId: string) => void
+
   // Config
   setIconSource: (source: IconSource) => void
   setIconBaseUrl: (url: string) => void
@@ -93,6 +98,7 @@ const DEFAULT_STATE: GameState = {
   log: [],
   globalNotes: '',
   bluffs: [],
+  storytellerRoles: [],
   script: null,
   iconSource: 'official',
   iconBaseUrl: '',
@@ -105,7 +111,7 @@ export const useGameStore = create<GameState & GameActions>()(
     (set, get) => ({
       ...DEFAULT_STATE,
 
-      loadScript: (script) => set({ script }),
+      loadScript: (script) => set({ script, storytellerRoles: scriptStorytellerRoleIds(script) }),
 
       setPhase: (phase) => set({ phase }),
 
@@ -270,6 +276,12 @@ export const useGameStore = create<GameState & GameActions>()(
       addBluff: (roleId) => set((s) => ({ bluffs: [...new Set([...s.bluffs, roleId])] })),
       removeBluff: (roleId) => set((s) => ({ bluffs: s.bluffs.filter((b) => b !== roleId) })),
 
+      // ── Fabled & Loric ──
+      addStorytellerRole: (roleId) =>
+        set((s) => ({ storytellerRoles: [...new Set([...s.storytellerRoles, roleId])] })),
+      removeStorytellerRole: (roleId) =>
+        set((s) => ({ storytellerRoles: s.storytellerRoles.filter((id) => id !== roleId) })),
+
       // ── Config ──
       setIconSource: (source) => set({ iconSource: source }),
       setIconBaseUrl: (url) => set({ iconBaseUrl: url }),
@@ -317,6 +329,7 @@ export const useGameStore = create<GameState & GameActions>()(
         set((s) => ({
           ...DEFAULT_STATE,
           script: s.script,
+          storytellerRoles: scriptStorytellerRoleIds(s.script),
           players: s.players.map((p) => ({
             ...p,
             isAlive: true,

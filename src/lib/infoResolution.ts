@@ -1,6 +1,6 @@
 import ENGLISH_STATEMENTS from '@/data/statements.json'
 import BUNDLED_TEMPLATES from '@/data/templates.json'
-import type { DraftAtom, InfoTemplate, LocaleData, RoleBase, TemplateAtom } from '@/types'
+import type { DraftAtom, InfoTemplate, LocaleData, Player, RoleBase, TemplateAtom } from '@/types'
 
 const STATEMENTS = ENGLISH_STATEMENTS as Record<string, string>
 const TEMPLATES = BUNDLED_TEMPLATES as InfoTemplate[]
@@ -66,12 +66,15 @@ export interface GameContext {
   demonPlayerId?: string | null
   /** The players holding minions, in seat order */
   minionPlayerIds?: string[]
+  /** Everyone at the table, to find who holds a named character */
+  players?: Player[]
 }
 
 /**
  * Expand a template and pre-fill the slots the grimoire can already answer:
  * the demon's bluffs, who the demon is (minion info) and who the minions are
- * (one player slot per minion).
+ * (one player slot per minion), and for "<player> THIS PLAYER IS THE <character>"
+ * (e.g. showing the Demon its Marionette) the player holding that character.
  */
 export function expandTemplateForGame(
   template: InfoTemplate,
@@ -84,6 +87,17 @@ export function expandTemplateForGame(
     const minions = ctx.minionPlayerIds.map((playerId): DraftAtom => ({ kind: 'player', playerId }))
     return [...atoms.filter((atom) => atom.kind !== 'player'), ...minions]
   }
+
+  const pointed = atoms.map((atom, i) => {
+    const stmt = atoms[i + 1]
+    const char = atoms[i + 2]
+    if (atom.kind !== 'player' || atom.playerId) return atom
+    if (stmt?.kind !== 'statement' || stmt.key !== 'this_player_is_the') return atom
+    if (char?.kind !== 'character' || !char.roleId) return atom
+    const holder = ctx.players?.find((p) => p.roleId === char.roleId)
+    return holder ? { ...atom, playerId: holder.id } : atom
+  })
+  if (pointed.some((atom, i) => atom !== atoms[i])) return pointed
 
   if (template.id === 'demon_info' || template.id === 'minion_info') {
     let bluffIdx = 0

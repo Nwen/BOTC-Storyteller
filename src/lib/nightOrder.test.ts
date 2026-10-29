@@ -69,4 +69,19 @@ describe('buildNightOrder', () => {
     expect(step?.label).toBe('Lavandière')
     expect(step?.reminder).toBe('Montrer un villageois.')
   })
+
+  it('runs Fabled & Loric in play right after dusk, even when off-script', () => {
+    const toymaker: RoleBase = {
+      id: 'toymaker', name: 'Toymaker', team: 'fabled',
+      firstNight: 3, firstNightReminder: 'Resolve Minion info.',
+      otherNight: 2, otherNightReminder: 'No final attack.',
+    }
+    const all = [IMP, WASHERWOMAN, toymaker]
+    expect(buildNightOrder('first', SCRIPT, PLAYERS, all, false, ['toymaker']).map((s) => s.id))
+      .toEqual(['dusk', 'toymaker', 'minioninfo', 'demoninfo', 'washerwoman', 'dawn'])
+    expect(buildNightOrder('other', SCRIPT, PLAYERS, all, false, ['toymaker']).map((s) => s.id))
+      .toEqual(['dusk', 'toymaker', 'imp', 'dawn'])
+    // Not in play: no step
+    expect(buildNightOrder('other', SCRIPT, PLAYERS, all).map((s) => s.id)).not.toContain('toymaker')
+  })
 })

@@ -3,6 +3,7 @@ import { Modal } from '@/components/ui/Modal'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { resolveRoleText } from '@/lib/roleResolution'
+import { ROLE_MAP } from '@/lib/scriptImport'
 import type { RoleBase } from '@/types'
 
 interface ReminderOption {
@@ -22,15 +23,20 @@ interface Props {
 export function ReminderPicker({ open, onClose, onSelect }: Props) {
   const [search, setSearch] = useState('')
   const [customText, setCustomText] = useState('')
-  const { script, players } = useGameStore()
+  const { script, players, storytellerRoles } = useGameStore()
   const { editOverrides, locales, activeLocale } = useLibraryStore()
 
   const options: ReminderOption[] = useMemo(() => {
     if (!script) return []
     const result: ReminderOption[] = []
-    const inPlayIds = new Set(players.map((p) => p.roleId).filter(Boolean))
+    const inPlayIds = new Set([...players.map((p) => p.roleId).filter(Boolean), ...storytellerRoles])
+    // Fabled the Storyteller brought in from outside the script still have reminders
+    const offScript = storytellerRoles
+      .filter((id) => !script.roles.some((r) => r.id === id))
+      .map((id) => ROLE_MAP.get(id))
+      .filter((r): r is RoleBase => r !== undefined)
 
-    for (const role of script.roles) {
+    for (const role of [...script.roles, ...offScript]) {
       const resolved = resolveRoleText(role as RoleBase, editOverrides, locales, activeLocale)
       // Per-role reminders: only add if role is in play
       if (inPlayIds.has(role.id)) {
@@ -44,7 +50,7 @@ export function ReminderPicker({ open, onClose, onSelect }: Props) {
       }
     }
     return result
-  }, [script, players, editOverrides, locales, activeLocale])
+  }, [script, players, storytellerRoles, editOverrides, locales, activeLocale])
 
   const filtered = options.filter(
     (o) =>

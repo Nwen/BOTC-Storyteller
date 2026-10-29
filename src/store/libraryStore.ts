@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { nanoid } from '@/lib/nanoid'
-import type { LibraryState, RoleBase, RoleTextOverride, LocaleData, InfoTemplate, LoadedScript } from '@/types'
+import { fetchRemoteScripts, pushRemoteScript, deleteRemoteScript } from '@/lib/scriptSync'
+import type { LibraryState, RoleBase, RoleTextOverride, LocaleData, InfoTemplate, LoadedScript, SavedScript } from '@/types'
 
 interface LibraryActions {
   // Custom roles
@@ -33,6 +34,8 @@ interface LibraryActions {
   // Imported scripts, kept across sessions
   saveScript: (script: LoadedScript, fallbackName?: string) => void
   removeSavedScript: (id: string) => void
+  /** Pull scripts saved from other devices and upload ones only this device has */
+  syncSavedScripts: () => Promise<void>
 
   // Bulk export / import
   exportLibrary: () => string
@@ -52,127 +55,177 @@ const defaultState: LibraryState = {
 
 export const useLibraryStore = create<LibraryState & LibraryActions>()(
   persist(
-    (set, get) => ({
-      ...defaultState,
-
-      addCustomRole: (role) =>
-        set((s) => ({ customRoles: [...s.customRoles, { ...role, custom: true }] })),
-
-      updateCustomRole: (id, updates) =>
+    (set, get) => {
+      /** Upload a script, then flag it synced if it hasn't been replaced in the meantime */
+      const pushAndMark = async (entry: SavedScript) => {
+        if (!(await pushRemoteScript(entry))) return
         set((s) => ({
-          customRoles: s.customRoles.map((r) => (r.id === id ? { ...r, ...updates } : r)),
-        })),
+          savedScripts: s.savedScripts.map((e) =>
+            e.id === entry.id && e.savedAt === entry.savedAt ? { ...e, synced: true } : e,
+          ),
+        }))
+      }
 
-      removeCustomRole: (id) =>
-        set((s) => ({ customRoles: s.customRoles.filter((r) => r.id !== id) })),
+      return {
+        ...defaultState,
 
-      setEditOverride: (id, override) =>
-        set((s) => ({ editOverrides: { ...s.editOverrides, [id]: { ...s.editOverrides[id], ...override } } })),
+        addCustomRole: (role) =>
+          set((s) => ({ customRoles: [...s.customRoles, { ...role, custom: true }] })),
 
-      clearEditOverride: (id) =>
-        set((s) => {
-          const next = { ...s.editOverrides }
-          delete next[id]
-          return { editOverrides: next }
-        }),
+        updateCustomRole: (id, updates) =>
+          set((s) => ({
+            customRoles: s.customRoles.map((r) => (r.id === id ? { ...r, ...updates } : r)),
+          })),
 
-      importLocale: (incoming) => {
-        set((s) => {
-          const key = incoming.locale
-          const existing = s.locales[key] ?? { locale: key, name: incoming.name, roles: {} }
-          return {
-            locales: {
-              ...s.locales,
-              [key]: {
-                ...existing,
-                name: incoming.name,
-                roles: { ...existing.roles, ...incoming.roles },
-                ...(incoming.teams      ? { teams:      { ...existing.teams,      ...incoming.teams      } } : {}),
-                ...(incoming.statements ? { statements: { ...existing.statements, ...incoming.statements } } : {}),
-                ...(incoming.yesno      ? { yesno:      { ...existing.yesno,      ...incoming.yesno      } } : {}),
-                ...(incoming.templates  ? { templates:  { ...existing.templates,  ...incoming.templates  } } : {}),
-              },
-            },
-          }
-        })
-      },
+        removeCustomRole: (id) =>
+          set((s) => ({ customRoles: s.customRoles.filter((r) => r.id !== id) })),
 
-      deleteLocale: (key) =>
-        set((s) => {
-          const next = { ...s.locales }
-          delete next[key]
-          return {
-            locales: next,
-            activeLocale: s.activeLocale === key ? 'en' : s.activeLocale,
-          }
-        }),
+        setEditOverride: (id, override) =>
+          set((s) => ({ editOverrides: { ...s.editOverrides, [id]: { ...s.editOverrides[id], ...override } } })),
 
-      setActiveLocale: (key) => set({ activeLocale: key }),
+        clearEditOverride: (id) =>
+          set((s) => {
+            const next = { ...s.editOverrides }
+            delete next[id]
+            return { editOverrides: next }
+          }),
 
-      addCustomTemplate: (template) =>
-        set((s) => ({
-          customTemplates: [...s.customTemplates, { ...template, id: nanoid(), custom: true }],
-        })),
-
-      updateCustomTemplate: (id, updates) =>
-        set((s) => ({
-          customTemplates: s.customTemplates.map((t) => (t.id === id ? { ...t, ...updates } : t)),
-        })),
-
-      removeCustomTemplate: (id) =>
-        set((s) => ({ customTemplates: s.customTemplates.filter((t) => t.id !== id) })),
-
-      setCustomStatement: (key, text) =>
-        set((s) => ({ customStatements: { ...s.customStatements, [key]: text } })),
-
-      removeCustomStatement: (key) =>
-        set((s) => {
-          const next = { ...s.customStatements }
-          delete next[key]
-          return { customStatements: next }
-        }),
-
-      addBundledScript: (script) =>
-        set((s) => ({ bundledScripts: [...s.bundledScripts, script] })),
-
-      saveScript: (script, fallbackName) =>
-        set((s) => {
-          const name = script.meta.name?.trim() || fallbackName?.trim() || 'Unnamed script'
-          const entry = { id: nanoid(), name, savedAt: Date.now(), script }
-          // Re-importing a script under a name already saved replaces it rather than duplicating
-          const existing = s.savedScripts.find((e) => e.name === name)
-          if (existing) {
+        importLocale: (incoming) => {
+          set((s) => {
+            const key = incoming.locale
+            const existing = s.locales[key] ?? { locale: key, name: incoming.name, roles: {} }
             return {
-              savedScripts: s.savedScripts.map((e) =>
-                e.id === existing.id ? { ...entry, id: existing.id } : e,
-              ),
+              locales: {
+                ...s.locales,
+                [key]: {
+                  ...existing,
+                  name: incoming.name,
+                  roles: { ...existing.roles, ...incoming.roles },
+                  ...(incoming.teams      ? { teams:      { ...existing.teams,      ...incoming.teams      } } : {}),
+                  ...(incoming.statements ? { statements: { ...existing.statements, ...incoming.statements } } : {}),
+                  ...(incoming.yesno      ? { yesno:      { ...existing.yesno,      ...incoming.yesno      } } : {}),
+                  ...(incoming.templates  ? { templates:  { ...existing.templates,  ...incoming.templates  } } : {}),
+                },
+              },
+            }
+          })
+        },
+
+        deleteLocale: (key) =>
+          set((s) => {
+            const next = { ...s.locales }
+            delete next[key]
+            return {
+              locales: next,
+              activeLocale: s.activeLocale === key ? 'en' : s.activeLocale,
+            }
+          }),
+
+        setActiveLocale: (key) => set({ activeLocale: key }),
+
+        addCustomTemplate: (template) =>
+          set((s) => ({
+            customTemplates: [...s.customTemplates, { ...template, id: nanoid(), custom: true }],
+          })),
+
+        updateCustomTemplate: (id, updates) =>
+          set((s) => ({
+            customTemplates: s.customTemplates.map((t) => (t.id === id ? { ...t, ...updates } : t)),
+          })),
+
+        removeCustomTemplate: (id) =>
+          set((s) => ({ customTemplates: s.customTemplates.filter((t) => t.id !== id) })),
+
+        setCustomStatement: (key, text) =>
+          set((s) => ({ customStatements: { ...s.customStatements, [key]: text } })),
+
+        removeCustomStatement: (key) =>
+          set((s) => {
+            const next = { ...s.customStatements }
+            delete next[key]
+            return { customStatements: next }
+          }),
+
+        addBundledScript: (script) =>
+          set((s) => ({ bundledScripts: [...s.bundledScripts, script] })),
+
+        saveScript: (script, fallbackName) => {
+          const name = script.meta.name?.trim() || fallbackName?.trim() || 'Unnamed script'
+          const saved = get().savedScripts
+          // Re-importing a script under a name already saved replaces it rather than duplicating
+          const existing = saved.find((e) => e.name === name)
+          const entry: SavedScript = { id: existing?.id ?? nanoid(), name, savedAt: Date.now(), script }
+          set({
+            savedScripts: existing
+              ? saved.map((e) => (e.id === existing.id ? entry : e))
+              : [...saved, entry],
+          })
+          void pushAndMark(entry)
+        },
+
+        removeSavedScript: (id) => {
+          set((s) => ({ savedScripts: s.savedScripts.filter((e) => e.id !== id) }))
+          void deleteRemoteScript(id)
+        },
+
+        syncSavedScripts: async () => {
+          const remote = await fetchRemoteScripts()
+          if (!remote) return
+
+          const local = get().savedScripts
+          const remoteIds = new Set(remote.map((e) => e.id))
+          const toPush: SavedScript[] = []
+
+          // Server copy wins, unless this device changed the script since it last synced
+          const merged = remote.map((r) => {
+            const l = local.find((e) => e.id === r.id)
+            if (l && !l.synced && l.savedAt > r.savedAt) {
+              toPush.push(l)
+              return l
+            }
+            return { ...r, synced: true }
+          })
+
+          for (const l of local) {
+            if (remoteIds.has(l.id)) continue
+            // Synced before but gone from the server: deleted on another device
+            if (l.synced) continue
+            // Never uploaded — but another device may have saved the same name meanwhile
+            const i = merged.findIndex((e) => e.name === l.name)
+            if (i === -1) {
+              merged.push(l)
+              toPush.push(l)
+            } else if (l.savedAt > merged[i].savedAt) {
+              merged[i] = { ...l, id: merged[i].id }
+              toPush.push(merged[i])
             }
           }
-          return { savedScripts: [...s.savedScripts, entry] }
-        }),
 
-      removeSavedScript: (id) =>
-        set((s) => ({ savedScripts: s.savedScripts.filter((e) => e.id !== id) })),
+          set({ savedScripts: merged.sort((a, b) => a.savedAt - b.savedAt) })
+          await Promise.all(toPush.map(pushAndMark))
+        },
 
-      exportLibrary: () => JSON.stringify(get(), null, 2),
+        exportLibrary: () => JSON.stringify(get(), null, 2),
 
-      importLibrary: (json) => {
-        try {
-          const data = JSON.parse(json) as Partial<LibraryState>
-          set((s) => ({
-            customRoles:       data.customRoles       ?? s.customRoles,
-            editOverrides:     data.editOverrides     ?? s.editOverrides,
-            locales:           data.locales           ?? s.locales,
-            activeLocale:      data.activeLocale      ?? s.activeLocale,
-            customTemplates:   data.customTemplates   ?? s.customTemplates,
-            customStatements:  data.customStatements  ?? s.customStatements,
-            savedScripts:      data.savedScripts      ?? s.savedScripts,
-          }))
-        } catch {
-          throw new Error('Invalid library JSON')
-        }
-      },
-    }),
+        importLibrary: (json) => {
+          try {
+            const data = JSON.parse(json) as Partial<LibraryState>
+            set((s) => ({
+              customRoles:       data.customRoles       ?? s.customRoles,
+              editOverrides:     data.editOverrides     ?? s.editOverrides,
+              locales:           data.locales           ?? s.locales,
+              activeLocale:      data.activeLocale      ?? s.activeLocale,
+              customTemplates:   data.customTemplates   ?? s.customTemplates,
+              customStatements:  data.customStatements  ?? s.customStatements,
+              // Sync state is per-device, so imported entries count as not uploaded yet
+              savedScripts:      data.savedScripts?.map(({ synced: _, ...e }) => e) ?? s.savedScripts,
+            }))
+          } catch {
+            throw new Error('Invalid library JSON')
+          }
+        },
+      }
+    },
     {
       name: 'botc-library',
       partialize: ({ bundledScripts: _, ...rest }) => rest,

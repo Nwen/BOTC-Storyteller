@@ -67,7 +67,7 @@ export function InfoComposer() {
     const tpl = templates.find((t) => t.id === id)
     if (!tpl) return
     useInfoStore.getState().openComposer({
-      draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId, minionPlayerIds }),
+      draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId, minionPlayerIds, players }),
       templateId: id,
     })
   }
@@ -257,7 +257,7 @@ interface EditorProps {
   atom: DraftAtom
   onChange: (atom: DraftAtom) => void
   onPickCharacter: () => void
-  players: Array<{ id: string; name: string; seatIndex: number }>
+  players: Array<{ id: string; name: string; seatIndex: number; roleId: string | null }>
   statementKeys: Array<{ key: string; label: string }>
   allRoles: Array<{ id: string; displayName: string; team: string }>
 }
@@ -285,9 +285,14 @@ function AtomEditor({ atom, onChange, onPickCharacter, players, statementKeys, a
           className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 min-h-[44px] text-base outline-none focus:border-blue-500"
         >
           <option value="">— pick player —</option>
-          {players.map((p) => (
-            <option key={p.id} value={p.id}>{p.name} (seat {p.seatIndex + 1})</option>
-          ))}
+          {players.map((p) => {
+            const role = p.roleId ? allRoles.find((r) => r.id === p.roleId) : null
+            return (
+              <option key={p.id} value={p.id}>
+                {p.name} ({p.seatIndex + 1}){role ? ` ${role.displayName}` : ''}
+              </option>
+            )
+          })}
         </select>
       )
 

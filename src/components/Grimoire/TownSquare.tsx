@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import {
   DndContext,
   DragEndEvent,
@@ -41,7 +41,10 @@ export function TownSquare({ players, hidden }: Props) {
   )
 
   const n = players.length
-  const tokenSize = tokenSizeForCount(n)
+  // The circle shrinks when the detail panel is open: keep tokens from overlapping
+  const circleRef = useRef<HTMLDivElement>(null)
+  const diameter = useElementWidth(circleRef)
+  const tokenSize = tokenSizeForDiameter(n, diameter)
   const positions = seatPositions(n)
 
   const handleDragStart = useCallback(
@@ -77,16 +80,18 @@ export function TownSquare({ players, hidden }: Props) {
   const ghostVotes = players.filter((p) => !p.isAlive && p.ghostVoteAvailable).length
 
   return (
-    <div className="flex h-full overflow-hidden">
-      {/* Circle area */}
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Circle area — a size container, so the circle fits whatever room the detail panel leaves */}
       <div
-        className="flex-1 flex items-center justify-center min-w-0 p-4"
+        className="flex-1 flex items-center justify-center min-h-0 p-4"
+        style={{ containerType: 'size' }}
         onClick={() => setSelectedId(null)}
       >
-        <div className="relative w-full h-full" style={{ maxWidth: 'calc(100vh - 140px)' }}>
+        <div className="relative">
           <div
+            ref={circleRef}
             className="relative mx-auto"
-            style={{ width: '100%', aspectRatio: '1 / 1', maxHeight: '100%' }}
+            style={{ width: 'min(100cqw, 100cqh)', aspectRatio: '1 / 1' }}
           >
             {/* Decorative ring */}
             <div
@@ -160,6 +165,26 @@ export function TownSquare({ players, hidden }: Props) {
       )}
     </div>
   )
+}
+
+function useElementWidth(ref: React.RefObject<HTMLElement | null>): number | null {
+  const [width, setWidth] = useState<number | null>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => setWidth(entry!.contentRect.width))
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [ref])
+  return width
+}
+
+/** The usual size for this many players, capped so neighbouring seats keep some room */
+function tokenSizeForDiameter(n: number, diameter: number | null): number {
+  const base = tokenSizeForCount(n)
+  if (!diameter || n < 2) return base
+  const seatGap = 2 * (diameter * 0.38) * Math.sin(Math.PI / n)   // chord between two seats
+  return Math.round(Math.max(36, Math.min(base, seatGap * 0.62)))
 }
 
 interface ExecutionInfoProps {

@@ -7,7 +7,8 @@ import { resolveRoleText } from '@/lib/roleResolution'
 import { BASE_ROLES } from '@/lib/scriptImport'
 import type { RoleBase, Team } from '@/types'
 
-const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled']
+// No Fabled / Loric: those are the Storyteller's (see StorytellerRoles), never a player's
+const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler']
 
 interface Props {
   open: boolean

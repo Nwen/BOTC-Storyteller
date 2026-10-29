@@ -8,7 +8,7 @@ import { RoleEditor } from './RoleEditor'
 import { CustomRoleCreator } from './CustomRoleCreator'
 import type { ResolvedRole, Team } from '@/types'
 
-const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled']
+const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled', 'loric']
 
 export function CharacterLibrary() {
   const {

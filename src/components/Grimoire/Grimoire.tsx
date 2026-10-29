@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import type { LoadedScript, Player } from '@/types'
 import { TownSquare } from './TownSquare'
+import { StorytellerRoles } from './StorytellerRoles'
 
 export function Grimoire() {
   const { players, phase, script, addPlayer, randomizeRoles } = useGameStore()
@@ -75,6 +76,8 @@ export function Grimoire() {
           </div>
         </div>
       </div>
+
+      <StorytellerRoles />
 
       {/* Town square */}
       <div className="flex-1 overflow-hidden">

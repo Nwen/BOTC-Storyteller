@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { useLibraryStore } from '@/store/libraryStore'
 import { useUiStore } from '@/store/uiStore'
@@ -36,7 +36,11 @@ export default function App() {
   const { phase, day } = useGameStore()
   const { activeLocale, locales } = useLibraryStore()
 
-  useEffect(() => { void loadBundledLocales(); void loadBundledScripts() }, [])
+  useEffect(() => {
+    void loadBundledLocales()
+    void loadBundledScripts()
+    void useLibraryStore.getState().syncSavedScripts()
+  }, [])
 
   const localeName = activeLocale === 'en' ? 'EN' : (locales[activeLocale]?.name ?? activeLocale)
 
@@ -71,6 +75,7 @@ export default function App() {
             <span className="hidden sm:inline">{label}</span>
           </button>
         ))}
+        <FullscreenButton />
       </nav>
 
       {/* Main content */}
@@ -87,6 +92,60 @@ export default function App() {
       {/* Global fullscreen overlay — rendered above everything */}
       <PresentationMode />
     </div>
+  )
+}
+
+// Safari on iPad only has the prefixed Fullscreen API
+type WebkitDocument = Document & { webkitFullscreenElement?: Element | null; webkitExitFullscreen?: () => void }
+type WebkitElement = HTMLElement & { webkitRequestFullscreen?: () => void }
+
+const fullscreenElement = () =>
+  document.fullscreenElement ?? (document as WebkitDocument).webkitFullscreenElement ?? null
+
+function FullscreenButton() {
+  const [isFullscreen, setIsFullscreen] = useState(() => fullscreenElement() !== null)
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(fullscreenElement() !== null)
+    document.addEventListener('fullscreenchange', onChange)
+    document.addEventListener('webkitfullscreenchange', onChange)
+    return () => {
+      document.removeEventListener('fullscreenchange', onChange)
+      document.removeEventListener('webkitfullscreenchange', onChange)
+    }
+  }, [])
+
+  const root = document.documentElement as WebkitElement
+  // e.g. iPhone Safari: no Fullscreen API at all (add the app to the home screen instead)
+  if (!root.requestFullscreen && !root.webkitRequestFullscreen) return null
+
+  const toggle = () => {
+    const doc = document as WebkitDocument
+    if (fullscreenElement()) {
+      if (document.exitFullscreen) void document.exitFullscreen()
+      else doc.webkitExitFullscreen?.()
+    } else if (root.requestFullscreen) {
+      void root.requestFullscreen().catch(() => {})
+    } else {
+      root.webkitRequestFullscreen?.()
+    }
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="ml-auto shrink-0 px-4 py-3 text-gray-500 hover:text-gray-300 transition-colors"
+      title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+      aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        {isFullscreen
+          // corners pointing in
+          ? <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+          // corners pointing out
+          : <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />}
+      </svg>
+    </button>
   )
 }
 

@@ -39,6 +39,7 @@
   .team-demon      { @apply text-red-400 border-red-500; }
   .team-traveler   { @apply text-purple-400 border-purple-500; }
   .team-fabled     { @apply text-yellow-400 border-yellow-500; }
+  .team-loric      { @apply text-emerald-400 border-emerald-500; }
 
   .bg-team-townsfolk { @apply bg-blue-900/40; }
   .bg-team-outsider  { @apply bg-cyan-900/40; }
@@ -46,4 +47,5 @@
   .bg-team-demon     { @apply bg-red-900/40; }
   .bg-team-traveler  { @apply bg-purple-900/40; }
   .bg-team-fabled    { @apply bg-yellow-900/40; }
+  .bg-team-loric     { @apply bg-emerald-900/40; }
 }

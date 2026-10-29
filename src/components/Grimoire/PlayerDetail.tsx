@@ -22,7 +22,7 @@ export function PlayerDetail({ player, onClose }: Props) {
   const {
     renamePlayer, removePlayer, setPlayerRole, setPlayerAlignment,
     killPlayer, revivePlayer, spendGhostVote, restoreGhostVote,
-    setPlayerNotes, addReminderToken, removeReminderToken, setPlayerFacadeRole,
+    addReminderToken, removeReminderToken, setPlayerFacadeRole,
     addLogEntry, players, bluffs,
   } = useGameStore()
 
@@ -52,14 +52,28 @@ export function PlayerDetail({ player, onClose }: Props) {
   const [editingName, setEditingName] = useState(false)
   const [nameValue, setNameValue] = useState(player.name)
 
-  const alignmentLabel =
-    player.alignment === 'good' ? '😇 Good' :
-    player.alignment === 'evil' ? '😈 Evil' : '❓ Unknown'
+  const [alignmentEmoji, alignmentName] =
+    player.alignment === 'good' ? ['😇', 'Good'] :
+    player.alignment === 'evil' ? ['😈', 'Evil'] : ['❓', 'Unknown']
 
   const cycleAlignment = () => {
     const next = player.alignment === 'unknown' ? 'good' : player.alignment === 'good' ? 'evil' : 'unknown'
     setPlayerAlignment(player.id, next)
   }
+
+  const alignmentButton = (compact: boolean) => (
+    <button
+      onClick={cycleAlignment}
+      title={compact ? alignmentName : undefined}
+      className={`px-3 py-2 rounded text-sm border min-h-[40px] ${
+        player.alignment === 'good' ? 'bg-blue-900 border-blue-700' :
+        player.alignment === 'evil' ? 'bg-red-900 border-red-700' :
+        'bg-gray-800 border-gray-700'
+      }`}
+    >
+      {compact ? alignmentEmoji : `${alignmentEmoji} ${alignmentName}`}
+    </button>
+  )
 
   /** Show "YOU ARE <character>" to the player straight away, without the composer */
   const showYouAre = () => {
@@ -86,6 +100,9 @@ export function PlayerDetail({ player, onClose }: Props) {
     addLogEntry('info_reveal', `Showed info: ${compositionToLogText(draft, players, roleName)}`)
   }
 
+  const showsBluffs = role?.team === 'demon'
+  const showButtonCount = 1 + Number(showsBluffs) + Number(!!template)
+
   /** Load this character's info template into the composer and jump to it */
   const prepareInfo = () => {
     if (!template) return
@@ -94,9 +111,9 @@ export function PlayerDetail({ player, onClose }: Props) {
   }
 
   return (
-    <div className="w-72 shrink-0 border-l border-gray-800 flex flex-col bg-gray-950">
+    <div className="shrink-0 max-h-[40%] border-t border-gray-800 flex flex-col bg-gray-950">
       {/* Title bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+      <div className="flex items-center justify-between px-4 py-1.5 border-b border-gray-800">
         {editingName ? (
           <input
             autoFocus
@@ -136,9 +153,9 @@ export function PlayerDetail({ player, onClose }: Props) {
         </div>
       </div>
 
-      <div className="flex-1 scrollable p-4 space-y-4">
+      <div className="flex-1 min-h-0 overflow-auto flex items-start gap-5 px-4 py-3">
         {/* Character */}
-        <div>
+        <div className="flex-[1.4] min-w-56">
           <p className="text-xs text-gray-500 mb-1.5">Character</p>
           <button
             onClick={() => setShowPicker(true)}
@@ -157,48 +174,56 @@ export function PlayerDetail({ player, onClose }: Props) {
             )}
           </button>
           {resolved && (
-            <p className="text-xs text-gray-500 mt-1.5 leading-snug">{resolved.displayAbility}</p>
-          )}
-
-          {hasFacade(player.roleId) && (
-            <div className="mt-2.5">
-              <p className="text-xs text-gray-500 mb-1.5">Thinks they are</p>
-              <button
-                onClick={() => setShowFacadePicker(true)}
-                className="w-full flex items-center gap-2 rounded-lg bg-gray-800 hover:bg-gray-700 p-2 text-left border border-dashed border-gray-600"
-              >
-                {perceivedResolved && perceivedRole ? (
-                  <>
-                    <CharacterIcon role={perceivedRole} size={28} className="shrink-0" />
-                    <span className="text-sm truncate">{perceivedResolved.displayName}</span>
-                  </>
-                ) : (
-                  <span className="text-sm text-gray-500">Pick the façade character…</span>
-                )}
-              </button>
-            </div>
+            <p className="text-xs text-gray-500 mt-1.5 leading-snug line-clamp-3" title={resolved.displayAbility}>{resolved.displayAbility}</p>
           )}
         </div>
 
+        {/* Façade */}
+        {hasFacade(player.roleId) && (
+          <div className="flex-1 min-w-40">
+            <p className="text-xs text-gray-500 mb-1.5">Thinks they are</p>
+            <button
+              onClick={() => setShowFacadePicker(true)}
+              className="w-full flex items-center gap-2 rounded-lg bg-gray-800 hover:bg-gray-700 p-2 text-left border border-dashed border-gray-600"
+            >
+              {perceivedResolved && perceivedRole ? (
+                <>
+                  <CharacterIcon role={perceivedRole} size={28} className="shrink-0" />
+                  <span className="text-sm truncate">{perceivedResolved.displayName}</span>
+                </>
+              ) : (
+                <span className="text-sm text-gray-500">Pick the façade character…</span>
+              )}
+            </button>
+          </div>
+        )}
+
         {/* Status */}
-        <div>
+        <div className="shrink-0">
           <p className="text-xs text-gray-500 mb-1.5">Status</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-col items-stretch gap-2">
             {player.isAlive ? (
-              <button
-                onClick={() => killPlayer(player.id)}
-                className="px-3 py-2 rounded bg-gray-800 hover:bg-red-900 text-sm border border-gray-700 min-h-[40px]"
-              >
-                ☽ Kill
-              </button>
-            ) : (
               <>
                 <button
-                  onClick={() => revivePlayer(player.id)}
-                  className="px-3 py-2 rounded bg-gray-800 hover:bg-green-900 text-sm border border-gray-700 min-h-[40px]"
+                  onClick={() => killPlayer(player.id)}
+                  className="px-3 py-2 rounded bg-gray-800 hover:bg-red-900 text-sm border border-gray-700 min-h-[40px]"
                 >
-                  ✦ Revive
+                  ☽ Kill
                 </button>
+                {alignmentButton(false)}
+              </>
+            ) : (
+              <>
+                {/* Dead: alignment shrinks to its emoji, beside Revive */}
+                <div className="flex gap-2">
+                  {alignmentButton(true)}
+                  <button
+                    onClick={() => revivePlayer(player.id)}
+                    className="flex-1 px-3 py-2 rounded bg-gray-800 hover:bg-green-900 text-sm border border-gray-700 min-h-[40px]"
+                  >
+                    ✦ Revive
+                  </button>
+                </div>
                 <button
                   onClick={() => player.ghostVoteAvailable ? spendGhostVote(player.id) : restoreGhostVote(player.id)}
                   className={`px-3 py-2 rounded text-sm border min-h-[40px] ${
@@ -211,24 +236,13 @@ export function PlayerDetail({ player, onClose }: Props) {
                 </button>
               </>
             )}
-
-            <button
-              onClick={cycleAlignment}
-              className={`px-3 py-2 rounded text-sm border min-h-[40px] ${
-                player.alignment === 'good' ? 'bg-blue-900 border-blue-700' :
-                player.alignment === 'evil' ? 'bg-red-900 border-red-700' :
-                'bg-gray-800 border-gray-700'
-              }`}
-            >
-              {alignmentLabel}
-            </button>
           </div>
         </div>
 
-        {/* Show to player */}
-        <div>
+        {/* Show to player — one column of buttons, or two rows once there are 3 */}
+        <div className="shrink-0">
           <p className="text-xs text-gray-500 mb-1.5">Show to player</p>
-          <div className="flex flex-wrap gap-2">
+          <div className={showButtonCount > 2 ? 'grid grid-rows-2 grid-flow-col gap-2' : 'flex flex-col items-stretch gap-2'}>
             <button
               onClick={showYouAre}
               disabled={!player.roleId}
@@ -239,10 +253,10 @@ export function PlayerDetail({ player, onClose }: Props) {
                   : 'Pick the façade character first'
               }
             >
-              👁 &ldquo;You are…&rdquo;
+              👁 Role
             </button>
-            {/* The Lunatic believes they are the Demon, so gets (fake) bluffs too */}
-            {(role?.team === 'demon' || role?.id === 'lunatic') && (
+            {/* Not the Lunatic: its made-up bluffs come from the lunatic_info template */}
+            {showsBluffs && (
               <button
                 onClick={showBluffs}
                 disabled={bluffs.length === 0}
@@ -258,61 +272,44 @@ export function PlayerDetail({ player, onClose }: Props) {
                 className="px-3 py-2 rounded bg-gray-800 hover:bg-gray-700 border border-gray-700 text-sm min-h-[40px]"
                 title={`Load the ${perceivedResolved?.displayName ?? ''} info template`}
               >
-                📋 Prepare info
+                📋 Info
               </button>
             )}
           </div>
         </div>
 
         {/* Reminder tokens */}
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <p className="text-xs text-gray-500">Reminders</p>
+        <div className="flex-1 min-w-44">
+          <p className="text-xs text-gray-500 mb-1.5">Reminders</p>
+          <div className="flex flex-wrap gap-1.5">
+            {player.reminders.map((token) => {
+              const sourceRole = token.roleId !== '_custom'
+                ? rolePool.find((r) => r.id === token.roleId)
+                : undefined
+              return (
+                <button
+                  key={token.id}
+                  onClick={() => removeReminderToken(player.id, token.id)}
+                  className="flex items-center gap-1 text-xs bg-yellow-900/50 border border-yellow-700 text-yellow-300 rounded-full pl-1 pr-2 py-1 hover:bg-red-900/50 hover:border-red-700 hover:text-red-300 transition-colors"
+                  title="Tap to remove"
+                >
+                  {sourceRole && (
+                    <CharacterIcon role={sourceRole} size={16} className="rounded-full shrink-0" />
+                  )}
+                  {token.label} ×
+                </button>
+              )
+            })}
+            {/* Same pill shape as a reminder, so it reads as "the next one" */}
             <button
               onClick={() => setShowReminder(true)}
-              className="px-4 min-h-[44px] rounded-lg bg-blue-900/60 hover:bg-blue-800 border border-blue-700 text-base font-medium text-blue-200"
+              className="flex items-center gap-1 text-xs bg-blue-900/50 border border-blue-700 text-blue-200 rounded-full px-2.5 py-1 min-h-[26px] hover:bg-blue-800 transition-colors"
             >
               + Add
             </button>
           </div>
-          {player.reminders.length === 0 ? (
-            <p className="text-xs text-gray-600">None.</p>
-          ) : (
-            <div className="flex flex-wrap gap-1.5">
-              {player.reminders.map((token) => {
-                const sourceRole = token.roleId !== '_custom'
-                  ? rolePool.find((r) => r.id === token.roleId)
-                  : undefined
-                return (
-                  <button
-                    key={token.id}
-                    onClick={() => removeReminderToken(player.id, token.id)}
-                    className="flex items-center gap-1 text-xs bg-yellow-900/50 border border-yellow-700 text-yellow-300 rounded-full pl-1 pr-2 py-1 hover:bg-red-900/50 hover:border-red-700 hover:text-red-300 transition-colors"
-                    title="Tap to remove"
-                  >
-                    {sourceRole && (
-                      <CharacterIcon role={sourceRole} size={16} className="rounded-full shrink-0" />
-                    )}
-                    {token.label} ×
-                  </button>
-                )
-              })}
-            </div>
-          )}
         </div>
 
-        {/* Notes */}
-        <div>
-          <p className="text-xs text-gray-500 mb-1.5">Notes</p>
-          <textarea
-            value={player.notes}
-            onChange={(e) => setPlayerNotes(player.id, e.target.value)}
-            placeholder="Freeform notes…"
-            rows={4}
-            className="w-full bg-gray-800 rounded px-3 py-2 text-xs border border-gray-700 outline-none focus:border-blue-500 resize-none"
-            style={{ userSelect: 'text' }}
-          />
-        </div>
       </div>
 
       <CharacterPicker

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { linkedCharacterIndex } from './infoResolution'
-import type { DraftAtom } from '@/types'
+import type { DraftAtom, Player } from '@/types'
 
 const player: DraftAtom = { kind: 'player', playerId: null }
 const character: DraftAtom = { kind: 'character', roleId: null }
@@ -57,6 +57,19 @@ describe('expandTemplateForGame', () => {
       { kind: 'statement', key: 'these_are_your_minions' },
       { kind: 'player', playerId: 'a' },
       { kind: 'player', playerId: 'b' },
+    ])
+  })
+})
+
+describe('expandTemplateForGame pointing at a character', () => {
+  it('shows the Demon which player is the Marionette', async () => {
+    const { expandTemplateForGame, getTemplateById } = await import('./infoResolution')
+    const tpl = getTemplateById('marionette_info', [])!
+    const players = [{ id: 'm', roleId: 'marionette' }, { id: 'd', roleId: 'imp' }] as Player[]
+    expect(expandTemplateForGame(tpl, { players })).toEqual([
+      { kind: 'player', playerId: 'm' },
+      { kind: 'statement', key: 'this_player_is_the' },
+      { kind: 'character', roleId: 'marionette' },
     ])
   })
 })

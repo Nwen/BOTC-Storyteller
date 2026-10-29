@@ -8,7 +8,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { CharacterIcon } from '@/components/ui/CharacterIcon'
 import type { Team, SavedScript } from '@/types'
 
-const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled']
+const TEAM_ORDER: Team[] = ['townsfolk', 'outsider', 'minion', 'demon', 'traveler', 'fabled', 'loric']
 
 export function ScriptManager() {
   const { script, loadScript } = useGameStore()

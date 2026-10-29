@@ -17,7 +17,7 @@ const SPECIAL_TEMPLATES: Record<string, string[]> = {
 }
 
 export function NightRunner() {
-  const { script, players, day, bluffs, advancePhase, setPhase } = useGameStore()
+  const { script, players, day, bluffs, storytellerRoles, advancePhase, setPhase } = useGameStore()
   const { editOverrides, locales, activeLocale, customTemplates } = useLibraryStore()
   const openComposer = useInfoStore((s) => s.openComposer)
   const goToPlayerInfo = useUiStore((s) => s.goToPlayerInfo)
@@ -49,8 +49,8 @@ export function NightRunner() {
   )
 
   const steps: NightStep[] = useMemo(
-    () => (script ? buildNightOrder(nightType, script, players, resolvedPool, includeAll) : []),
-    [nightType, script, players, resolvedPool, includeAll],
+    () => (script ? buildNightOrder(nightType, script, players, resolvedPool, includeAll, storytellerRoles) : []),
+    [nightType, script, players, resolvedPool, includeAll, storytellerRoles],
   )
 
   const total = steps.length
@@ -68,7 +68,7 @@ export function NightRunner() {
   /** Toggle the full script without losing progress: steps are carried over by id */
   const toggleFullScript = (on: boolean) => {
     if (!script) return
-    const next = buildNightOrder(nightType, script, players, resolvedPool, on)
+    const next = buildNightOrder(nightType, script, players, resolvedPool, on, storytellerRoles)
     const indexOf = (id: string) => next.findIndex((s) => s.id === id)
     // The current step, or if it is hidden now, the next one still listed
     let current = next.length - 1
@@ -181,7 +181,7 @@ export function NightRunner() {
                       key={tpl.id}
                       onClick={() => {
                         openComposer({
-                          draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId, minionPlayerIds }),
+                          draft: expandTemplateForGame(tpl, { bluffs, demonPlayerId, minionPlayerIds, players }),
                           templateId: tpl.id,
                         })
                         goToPlayerInfo()
