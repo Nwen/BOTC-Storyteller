@@ -1,6 +1,7 @@
 services:
   botc-storyteller:
     build: .
+    pull_policy: build # reconstruit l'image à chaque redéploiement (sinon l'ancienne est réutilisée)
     ports:
       - "32768:80"
     restart: unless-stopped
